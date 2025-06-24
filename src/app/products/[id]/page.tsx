@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { DropdownList } from '@/components/DropdownList'
 import { ShoppingCartIcon } from 'lucide-react'
 import { ProductSection } from '@/components/ProductSection'
+import { Product } from '@/types/product'
 
 const products : Product[] = [
   {
