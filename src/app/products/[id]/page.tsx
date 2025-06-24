@@ -3,11 +3,56 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DropdownList } from '@/components/DropdownList'
-
 import { ShoppingCartIcon } from 'lucide-react'
+import { ProductSection } from '@/components/ProductSection'
+
+const products : Product[] = [
+  {
+    id: "1",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  },
+  {
+    id: "2",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  },
+  {
+    id: "3",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  },
+  {
+    id: "4",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  },
+  {
+    id: "5",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  },
+  {
+    id: "6",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  },
+  {
+    id: "7",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  },
+  {
+    id: "8",
+    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
+    price: 104.99
+  }
+
+]
+
 export default function ProductPage (){
     return (
-        <div>
+        <div className='max-w-6xl m-auto '>
             <div className='w-full h-full  flex flex-row '>
                 <div className=' flex-1/2 p-4 h-[500px]'> {/*image container*/}
                     <div className='h-full w-full p-4 bg-white'>image</div>
@@ -41,8 +86,8 @@ export default function ProductPage (){
                 </div>
             </div>
 
-            <div className='w-full bg-amber-300'> {/*itens relacionados*/}
-                ola
+            <div className='w-full'> {/*itens relacionados*/}
+                <ProductSection products={products} itemsPerPage={4}/>
             </div>
         </div>
     )
