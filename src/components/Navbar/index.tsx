@@ -1,10 +1,11 @@
 import React from 'react';
+import Link from 'next/link';
 
 const Navbar: React.FC = () => {
     return (
     <nav className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 md:px-16 py-4 bg-pink-200 ">
         <ul className="hidden md:flex gap-6 font-medium text-pink-800">
-          <li className="hover:text-pink-600 cursor-pointer">Início</li>
+          <Link href={"/"}><li className="hover:text-pink-600 cursor-pointer">Início</li></Link>
           <li className="hover:text-pink-600 cursor-pointer">Coleções</li>
           <li className="hover:text-pink-600 cursor-pointer">Categorias</li>
           <li className="hover:text-pink-600 cursor-pointer">Contato</li>
