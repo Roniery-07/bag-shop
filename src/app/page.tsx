@@ -49,6 +49,7 @@ const products : Product[] = [
 
 
 export default function Home() {
+
   return (
       <div className="flex flex-col ">
         <BannerSection/>
@@ -62,10 +63,6 @@ export default function Home() {
           <h1 className="text-2xl text-center mb-11 font-bold">Categorias</h1>
           <CategorySection/>
         </section>
-
-        <footer>
-          footer
-        </footer>
       </div>
     );
 }
