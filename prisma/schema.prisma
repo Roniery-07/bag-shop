@@ -20,4 +20,17 @@ model Product{
   price Decimal
   description String?
   createdAt DateTime @default(now())    
+
+  images ProductImages[]
+}
+
+model ProductImages{
+  id Int @id @default(autoincrement())
+  url String 
+  alt String?
+  order Int?
+  product Product @relation(fields: [productId], references: [id]) 
+  productId Int
+  createdAt DateTime @default(now())
+
 }
