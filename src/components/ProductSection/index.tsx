@@ -62,7 +62,7 @@ export function ProductSection({
 
       {/* faixa de cards */}
       <div
-        className={`overflow-hidden px-12`} /* espaço p/ setas */
+        className={`overflow-hidden`} /* espaço p/ setas */
       >
         <ul
           // animação: desloca toda a faixa de acordo com a página
