@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import {prisma} from "@lib/prisma"
+import { listProducts } from "@/lib/db/product";
 
 export async function GET(){
-    // return new NextResponse("ola", { status: 200 });
     try{
-        const products = await prisma.product.count({});
-        return NextResponse.json(products)
+        const products= await listProducts();
+        return NextResponse.json(products);
     }
     catch(error){
         console.log(error)

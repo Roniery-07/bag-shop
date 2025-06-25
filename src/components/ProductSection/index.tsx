@@ -66,7 +66,7 @@ export function ProductSection({
       >
         <ul
           // animação: desloca toda a faixa de acordo com a página
-          className={`flex transition-transform duration-500 ${gap}`}
+          className={`flex transition-transform duration-1000 ${gap}`}
           style={{ transform: `translateX(-${page * 100}%)` }}
         >
           {products.map((p) => (
