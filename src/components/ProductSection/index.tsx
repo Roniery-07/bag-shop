@@ -2,12 +2,12 @@
 
 import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ProductCard } from "../ProductCard";
-import { Product } from "@/types/product";
+import ProductCard from "@/components/ProductCard";
+import { ProductDTO } from "@/types/product"; 
 
 
 interface Props {
-  products: Product[];
+  products: ProductDTO[];
   itemsPerPage?: number;   // quantos cards aparecem de cada vez
   gap?: string;            // espaçamento entre cards (classe tailwind)
 }
@@ -66,7 +66,7 @@ export function ProductSection({
       >
         <ul
           // animação: desloca toda a faixa de acordo com a página
-          className={`flex transition-transform duration-500 ${gap}`}
+          className={`flex transition-transform duration-1000 ${gap}`}
           style={{ transform: `translateX(-${page * 100}%)` }}
         >
           {products.map((p) => (

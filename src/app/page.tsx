@@ -1,54 +1,13 @@
 import BannerSection from "@/components/BannerSection";
 import { ProductSection} from "@/components/ProductSection";
 import { CategorySection } from "@/components/CategorySection";
-import { Product } from "@/types/product";
 
-const products : Product[] = [
-  {
-    id: "1",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "2",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "3",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "4",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "5",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "6",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "7",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "8",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  }
+import { listProducts } from "@/lib/db/product";
 
-]
-
-
-export default function Home() {
+export default async function Home() {
+  console.log("fetching: ")
+  const products = await listProducts();
+  console.log(products)
 
   return (
       <div className="flex flex-col ">
