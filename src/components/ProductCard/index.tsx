@@ -1,21 +1,37 @@
-import Link from "next/link"
-import { Product } from "@/types/product"
+'use client';
 
-interface Props{
-  product: Product
+import Link from 'next/link';
+import Image from 'next/image';
+import type { ProductDTO } from '@/types/product';
+
+interface Props {
+  product: ProductDTO;
 }
 
-export function ProductCard({product}: Props) {
+export default function ProductCard({ product }: Props) {
   return (
-    <Link className="w-60 h-70 bg-white rounded-md p-4 flex flex-col gap-2" href={'products/1'}>
-        <div className="rounded-md h-30 bg-neutral-200 ">imagem</div> 
+    <Link
+      href={`/products/${product.id}`}
+      className="group flex w-64 flex-col gap-3 rounded-xl bg-white p-4 shadow hover:shadow-lg transition-shadow"
+    >
+      <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-neutral-200">
+        <Image
+          src={product.images[0].url}
+          alt={product.name}
+          fill
+          sizes="(min-width: 768px) 256px, 45vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          priority
+        />
+      </div>
 
-        <section className="flex flex-col gap-5 items-center">
-            <span className="text-xs">{product.name}</span>
+      <h3 className="line-clamp-2 text-center text-sm font-medium text-neutral-800">
+        {product.name}
+      </h3>
 
-            <span> <b>R$ {product.price}</b></span>
-
-        </section>
+      <span className="text-center text-base font-semibold text-primary-600">
+        {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+      </span>
     </Link>
-  )
+  );
 }
