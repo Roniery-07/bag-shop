@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 import { ProductWithImages } from "./product.types";
 
 export async function listProducts(): Promise<ProductWithImages[]> {
