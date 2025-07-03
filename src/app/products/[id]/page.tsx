@@ -42,14 +42,22 @@ export default async function ProductPage({ params }: PageProps) {
                 <div className=' flex-1/2 flex flex-row'> {/* product description */}
                     <div className='flex-4/6 px-3'>
                         <div> {/*headers*/}
-                            <p className='text-xl'>{product.name}</p>
-                            <p className='text-xl'>{product.description}</p>
-                            <p>R$ {product.price.toLocaleString('br')}</p> {/*description*/}
+                            <div> {/*product especification*/ }
+                                <p className='text-xl'>{product.name}</p>
+                                <p className='text-xl'>{product.description}</p>
+                                <p>R$ {product.price.toLocaleString('br')}</p> {/*description*/}
+                                <div className='flex items-center w-full py-4'>
+                                <hr className='text-slate-300  w-full'/>
+                                </div>
+                            </div>
+                            <div> {/*product variations*/}
+                                
+                            </div>
                         </div>
                     </div>
                     <div className='flex-2/6 border-2 p-4 border-slate-300 rounded-md '> {/*buy section*/}
                         <div className='flex flex-col '>
-                            <p>R$ 20,99</p>
+                            <p>R$ {product.price.toLocaleString('br')}</p>
                             <p className='text-sm font-bold'>Entrega A Combinar</p>
                         </div>
                         <div className='flex flex-col gap-5 mb-3'>
