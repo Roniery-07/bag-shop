@@ -27,24 +27,24 @@ export default async function ProductPage({ params }: PageProps) {
 
     return (
         <div className='max-w-6xl m-auto '>
-            <div className='w-full h-full  flex flex-row '>
-                <div className=' flex-1/2 p-4 h-[500px]'> {/*image container*/}
-                    <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-neutral-200">
+            <div className='w-full h-full p-4 flex flex-row '>
+                <div className=' flex-1/2 '> {/*image container*/}
+                    <div className="relative h-[500px] w-[500px] aspect-square overflow-hidden rounded-lg ">
                         <Image
-                            src={product.images[0].url}
+                            src={product.images.find(image => image.order == 1)?.url ?? product.images[0].url}
                             alt={product.name ?? "image"}
                             fill
-                            sizes="(min-width: 768px) 256px, 45vw"
                             className="object-cover transition-transform duration-300 group-hover:scale-105"
                             priority
                         />
                     </div>
                 </div>
-                <div className=' flex-1/2 p-4 flex flex-row'> {/* product description */}
+                <div className=' flex-1/2 flex flex-row'> {/* product description */}
                     <div className='flex-4/6 px-3'>
                         <div> {/*headers*/}
-                            <p className='text-xl'>Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda</p>
-                            <p>R$ 20,99</p> {/*description*/}
+                            <p className='text-xl'>{product.name}</p>
+                            <p className='text-xl'>{product.description}</p>
+                            <p>R$ {product.price.toLocaleString('br')}</p> {/*description*/}
                         </div>
                     </div>
                     <div className='flex-2/6 border-2 p-4 border-slate-300 rounded-md '> {/*buy section*/}
