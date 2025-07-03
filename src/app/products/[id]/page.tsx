@@ -5,58 +5,40 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { DropdownList } from '@/components/DropdownList'
 import { ShoppingCartIcon } from 'lucide-react'
 import { ProductSection } from '@/components/ProductSection'
-import { Product } from '@/types/product'
 
-const products : Product[] = [
-  {
-    id: "1",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "2",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "3",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "4",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "5",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "6",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "7",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  },
-  {
-    id: "8",
-    name: "Mala Pequena de Bordo 10kg Rígida Rodas Giro 360° Verona Stradda",
-    price: 104.99
-  }
+import { getProduct, listProducts } from '@/lib/modules/product/product.service'
+import Image from 'next/image'
+import { notFound } from 'next/navigation'
 
-]
+interface PageProps {
+    params: { id: string }
+}
 
-export default function ProductPage (){
+export default async function ProductPage({ params }: PageProps) {
+    const p = await params
+    const id = Number(p.id)
+
+    console.log("fetching: ")
+    const products = await listProducts();
+    console.log(products)
+
+    const product = await getProduct(id)
+    if (!product) notFound();
+
     return (
         <div className='max-w-6xl m-auto '>
             <div className='w-full h-full  flex flex-row '>
                 <div className=' flex-1/2 p-4 h-[500px]'> {/*image container*/}
-                    <div className='h-full w-full p-4 bg-white'>image</div>
+                    <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-neutral-200">
+                        <Image
+                            src={product.images[0].url}
+                            alt={product.name ?? "image"}
+                            fill
+                            sizes="(min-width: 768px) 256px, 45vw"
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            priority
+                        />
+                    </div>
                 </div>
                 <div className=' flex-1/2 p-4 flex flex-row'> {/* product description */}
                     <div className='flex-4/6 px-3'>
@@ -71,24 +53,24 @@ export default function ProductPage (){
                             <p className='text-sm font-bold'>Entrega A Combinar</p>
                         </div>
                         <div className='flex flex-col gap-5 mb-3'>
-                            <DropdownList className="bg-white hover:bg-slate-100 transition-all"/>
+                            <DropdownList className="bg-white hover:bg-slate-100 transition-all" />
                             <Button className='bg-yellow-400 w-full hover:bg-yellow-500 transition-all align-center'>
                                 Adicionar ao Carrinho
-                                <ShoppingCartIcon/>
-                            </Button>     
-                            <Button className='bg-green-500 w-full hover:bg-green-600 transition-all '>Comprar</Button>     
+                                <ShoppingCartIcon />
+                            </Button>
+                            <Button className='bg-green-500 w-full hover:bg-green-600 transition-all '>Comprar</Button>
                         </div>
-                        <hr className='text-slate-300 pb-4'/>
+                        <hr className='text-slate-300 pb-4' />
                         <div className='flex flex-row'>
                             <Label htmlFor='isPresentInput'>Comprar esse item como presente</Label>
-                            <Checkbox id='isPresentInput'/>
+                            <Checkbox id='isPresentInput' />
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className='w-full'> {/*itens relacionados*/}
-                <ProductSection products={products} itemsPerPage={4}/>
+                <ProductSection products={products} itemsPerPage={4} />
             </div>
         </div>
     )
