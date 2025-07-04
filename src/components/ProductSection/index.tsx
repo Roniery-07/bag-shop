@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import { ProductDTO } from "@/types/product"; 
+import { ProductDTO } from "@lib/modules/product/product.dto"; 
 
 
 interface Props {
