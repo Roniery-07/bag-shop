@@ -1,8 +1,7 @@
 import BannerSection from "@/components/BannerSection";
 import { ProductSection} from "@/components/ProductSection";
 import { CategorySection } from "@/components/CategorySection";
-
-import { listProducts } from "@/lib/db/product";
+import { listProducts } from "@/lib/modules/product/product.service";
 
 export default async function Home() {
   console.log("fetching: ")
