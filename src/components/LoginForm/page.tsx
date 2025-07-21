@@ -28,7 +28,7 @@ export default function LoginForm() {
 
   const form = useForm<LoginData>({
     resolver: zodResolver(schema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { name: '', email: '', password: '' },
   });
 
   const onSubmit = (data: LoginData) => {
@@ -44,7 +44,7 @@ export default function LoginForm() {
         >
             <FormField
             control={form.control}
-            name='name'
+            name="name"
             render={({field}) => (
               <FormItem>
                 <FormLabel>Nome</FormLabel>
@@ -59,9 +59,7 @@ export default function LoginForm() {
                 </FormControl>
               </FormItem> 
             )}
-            >
-
-            </FormField>
+            />
             <FormField
             control={form.control}
             name="email"
