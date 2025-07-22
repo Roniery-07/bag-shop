@@ -1,9 +1,11 @@
-import React from 'react'
+import Dashboard from "./dashboard";
 
 export default function ManagerPage() {
   return (
-    <div className='w-full h-full'>
-      
+    <div className="h-sreen w-full">
+      <div>
+        <Dashboard/>
+      </div>    
     </div>
-  )
+  );
 }

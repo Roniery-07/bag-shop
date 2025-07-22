@@ -1,6 +1,6 @@
 import React from 'react'
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
-import { ManagerSidebar } from "@/components/ManagerSidebar"
+import { ManagerSidebar } from "@/components/manager-sidebar"
 
 
 
