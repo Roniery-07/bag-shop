@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/product-card";
 import { ProductDTO } from "@lib/modules/product/product.dto"; 
 
 
