@@ -1,6 +1,6 @@
-import BannerSection from "@/components/BannerSection";
-import { ProductSection} from "@/components/ProductSection";
-import { CategorySection } from "@/components/CategorySection";
+import BannerSection from "@/components/banner-section";
+import { ProductSection} from "@/components/product-section";
+import { CategorySection } from "@/components/category-section";
 import { listProducts } from "@/lib/modules/product/product.service";
 
 export default async function Home() {
