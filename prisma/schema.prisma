@@ -10,13 +10,13 @@ datasource db {
 }
 
 model Product{
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   name String?
   price Decimal
   description String?
   createdAt DateTime @default(now())    
 
-  images ProductImages[]
+  images ProductImages[] 
 }
 
 model ProductImages{
@@ -25,13 +25,13 @@ model ProductImages{
   alt String?
   order Int?
   product Product @relation(fields: [productId], references: [id]) 
-  productId Int
+  productId String @db.Uuid
   createdAt DateTime @default(now())
 
 }
 
 model User {
-  id            String          @id @default(cuid())
+  id            String          @id @default(cuid()) 
   name          String?
   email         String          @unique
   emailVerified DateTime?
