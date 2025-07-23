@@ -1,10 +1,11 @@
 -- CreateTable
 CREATE TABLE "Product" (
-    "id" UUID NOT NULL,
-    "name" TEXT,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
     "description" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "quantity" INTEGER NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
