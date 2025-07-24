@@ -3,11 +3,11 @@
 import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/product-card";
-import { ProductDTO } from "@lib/modules/product/product.dto"; 
+import { ListProductOutputDto } from "@/usecases/product/list-product.usecases";
 
 
 interface Props {
-  products: ProductDTO[];
+  products: ListProductOutputDto;
   itemsPerPage?: number;   // quantos cards aparecem de cada vez
   gap?: string;            // espaçamento entre cards (classe tailwind)
 }

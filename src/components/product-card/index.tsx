@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import type { ProductDTO } from '@/lib/modules/product/product.dto.ts';
+import { ListProductOutputDto } from '@/usecases/product/list-product.usecases';
+
+type ProductView = ListProductOutputDto[number]
 
 interface Props {
-  product: ProductDTO;
+  product: ProductView;
 }
 
 export default function ProductCard({ product }: Props) {
@@ -31,7 +33,8 @@ export default function ProductCard({ product }: Props) {
       </h2>
 
       <h3 className="line-clamp-2 text-center text-sm font-medium text-neutral-800">
-        {product.description}
+        {/* {product.description} */}
+        Descricao template, Falta implementar descricao na entidade e por consequencia tudo
       </h3>
       <span className="text-center text-base font-semibold text-primary-600">
         {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
