@@ -1,10 +1,13 @@
 import { ProductGateway } from "@/domain/product/gateway/product.gateway";
 import { Usecase } from "../usecases";
 import { Product } from "@/domain/product/entity/product";
+import { ProductImage } from "@/domain/product-image/entity/product-image";
 
 export type CreateProductInputDto = {
     name: string;
     price: number;
+    quantity: number;
+    images: ProductImage[]
 }
 
 export type CreateProductOutputDto = {
@@ -15,17 +18,19 @@ export class CreateProductUsecase implements Usecase<CreateProductInputDto, Crea
 
     private constructor(private readonly productGateway: ProductGateway){}
 
-    public create(productGateway: ProductGateway){
+    public static create(productGateway: ProductGateway){
         return new CreateProductUsecase(productGateway)
     }
 
     public async execute({
         name,
-        price
+        price,
+        quantity,
+        images
     }: CreateProductInputDto) : Promise<CreateProductOutputDto>{
 
         // criamos o product dentro da logica do codigo
-        const product = Product.create(name, price)
+        const product = Product.create(name, price, quantity, images)
         // salvamos o product dentro do banco
         await this.productGateway.save(product)
 
@@ -33,7 +38,7 @@ export class CreateProductUsecase implements Usecase<CreateProductInputDto, Crea
     }
     
     // 'formata' a saida
-    private presentOutput(product : Product){
+    private presentOutput(product : Product) : CreateProductOutputDto{
         return {
             id: product.id
         }
