@@ -1,20 +1,25 @@
+import { ProductImage } from "@/domain/product-image/entity/product-image";
+
+
 export type ProductProps = {
     id: string;
     name: string;
     price: number;
     quantity: number;
+    images: ProductImage[]
 }
 
 
 export class Product{
     private constructor(private props : ProductProps){}
 
-    public static create(name: string, price: number){
+    public static create(name: string, price: number, quantity: number, images: ProductImage[]){
         return new Product({
             id : crypto.randomUUID().toString(),
             name,
             price,
-            quantity: 0
+            quantity,
+            images
         })
     }
 
@@ -33,5 +38,8 @@ export class Product{
     }
     public get quantity(){
         return this.props.quantity
+    }
+    public get images(){
+        return this.props.images;
     }
 }
