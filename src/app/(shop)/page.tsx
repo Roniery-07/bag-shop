@@ -1,11 +1,17 @@
 import BannerSection from "@/components/banner-section";
 import { ProductSection} from "@/components/product-section";
 import { CategorySection } from "@/components/category-section";
-import { listProducts } from "@/lib/modules/product/product.service";
+import { ProductRepositoryPrisma } from "@/infrastructure/repositories/product/product.repository.prisma";
+import { prisma } from "@/lib/db/prisma";
+import { ListProductUsecase } from "@/usecases/product/list-product.usecases";
 
 export default async function Home() {
   console.log("fetching: ")
-  const products = await listProducts();
+  const repo = ProductRepositoryPrisma.create(prisma)
+  const listProductUsecase = ListProductUsecase.create(repo)
+
+  const products = await listProductUsecase.execute();
+  
   console.log(products)
 
   return (

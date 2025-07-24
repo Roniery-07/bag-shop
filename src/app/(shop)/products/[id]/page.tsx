@@ -6,10 +6,12 @@ import { DropdownList } from '@/components/dropdown-list'
 import { ShoppingCartIcon } from 'lucide-react'
 import { ProductSection } from '@/components/product-section'
 
-import { getProduct, listProducts } from '@/lib/modules/product/product.service'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { ProductRepositoryPrisma } from '@/infrastructure/repositories/product/product.repository.prisma'
+import { prisma } from '@/lib/db/prisma'
+import { GetProductUsecase } from '@/usecases/product/get-product.usecases'
 
 interface PageProps {
     params: { id: string }
@@ -17,14 +19,14 @@ interface PageProps {
 
 export default async function ProductPage({ params }: PageProps) {
     const p = await params
-    const id = Number(p.id)
 
     console.log("fetching: ")
-    const products = await listProducts();
-    console.log(products)
+    const repo = ProductRepositoryPrisma.create(prisma)
+    const getProductUsecase = GetProductUsecase.create(repo)
+    const product = await getProductUsecase.execute({id: p.id})
 
-    const product = await getProduct(id)
     if (!product) notFound();
+
 
     return (
         <div className='max-w-6xl m-auto '>
@@ -45,7 +47,7 @@ export default async function ProductPage({ params }: PageProps) {
                         <div className='flex flex-col'> {/*headers*/}
                             <div> {/*product especification*/ }
                                 <p className='text-xl'>{product.name}</p>
-                                <p className='text-xl'>{product.description}</p>
+                                {/* <p className='text-xl'>{product.description}</p> */}
                                 <p>R$ {product.price.toLocaleString('br')}</p> {/*description*/}
                                 <div className='flex items-center w-full py-4'>
                                 <hr className='text-slate-300  w-full'/>
@@ -93,7 +95,7 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
 
             <div className='w-full'> {/*itens relacionados*/}
-                <ProductSection products={products} itemsPerPage={4} />
+                {/* <ProductSection products={products} itemsPerPage={4} /> */}
             </div>
         </div>
     )
