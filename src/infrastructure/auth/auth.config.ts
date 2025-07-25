@@ -1,5 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from 'next/server';
+import Credentials from "next-auth/providers/credentials" 
  
 export const protectedRoutes = [
   '/cart',
@@ -27,5 +28,5 @@ export const authConfig = {
     },
   },
 
-  providers: [], 
+  providers: [Credentials], 
 } satisfies NextAuthConfig;
