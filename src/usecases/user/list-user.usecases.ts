@@ -1,6 +1,6 @@
-import { User } from "@/domain/user/entity/user"
+import { User } from "@/domain/model/user/entity/user"
 import { Usecase } from "../usecases"
-import { UserGateway } from "@/domain/user/gateway/user.gateway"
+import { UserGateway } from "@/domain/model/user/gateway/user.gateway"
 
 export type ListUserInputDto = void
 

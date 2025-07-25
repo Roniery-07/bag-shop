@@ -1,4 +1,4 @@
-import { Product } from '@/domain/product/entity/product';
+import { Product } from '@/domain/model/product/entity/product';
 import { GetProductOutputDto } from './get-product.usecases';
 
 export const productToDto = (p: Product): GetProductOutputDto => ({

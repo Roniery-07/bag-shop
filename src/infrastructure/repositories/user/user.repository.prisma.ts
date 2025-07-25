@@ -1,5 +1,5 @@
-import { User } from "@/domain/user/entity/user";
-import { UserGateway } from "@/domain/user/gateway/user.gateway";
+import { User } from "@/domain/model/user/entity/user";
+import { UserGateway } from "@/domain/model/user/gateway/user.gateway";
 import { PrismaClient } from "@/generated/prisma";
 
 export class UserRepositoryPrisma implements UserGateway{

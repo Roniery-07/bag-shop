@@ -1,7 +1,7 @@
-import { ProductGateway } from "@/domain/product/gateway/product.gateway";
+import { ProductGateway } from "@/domain/model/product/gateway/product.gateway";
 import { Usecase } from "../usecases";
-import { Product } from "@/domain/product/entity/product";
-import { ProductImage } from "@/domain/product-image/entity/product-image";
+import { Product } from "@/domain/model/product/entity/product";
+import { ProductImage } from "@/domain/model/product-image/entity/product-image";
 
 export type CreateProductInputDto = {
     name: string;

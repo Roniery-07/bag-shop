@@ -1,6 +1,6 @@
-import { ProductGateway } from "@/domain/product/gateway/product.gateway";
+import { ProductGateway } from "@/domain/model/product/gateway/product.gateway";
 import { Usecase } from "../usecases";
-import { Product } from "@/domain/product/entity/product";
+import { Product } from "@/domain/model/product/entity/product";
 
 export type ListProductInputDto = void
 

@@ -1,4 +1,4 @@
-import { ProductImage } from "@/domain/product-image/entity/product-image";
+import { ProductImage } from "@/domain/model/product-image/entity/product-image";
 
 
 export type ProductProps = {
