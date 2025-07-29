@@ -17,6 +17,8 @@ model Product{
   createdAt DateTime @default(now())    
   quantity Int
   images ProductImages[] 
+
+  @@map("products")
 }
 
 model ProductImages{
@@ -28,6 +30,7 @@ model ProductImages{
   productId String @db.Uuid
   createdAt DateTime @default(now())
 
+  @@map("product_images")
 }
 
 
