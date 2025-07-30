@@ -15,6 +15,8 @@ import {
 } from '@/components/ui/form';
 
 import { Input } from '@/components/ui/input';
+import { signUp } from '@/lib/auth-client';
+import { ErrorContext } from 'better-auth/react';
 
 const schema = z.object({
   name: z.string().min(4, {message: 'Mín. 4 caracteres'}),
@@ -31,15 +33,28 @@ export default function RegisterForm() {
     defaultValues: { name: '', email: '', password: '' },
   });
 
-  const onSubmit = (data: LoginData) => {
-    console.log('Login OK', data);
-  };
+  async function handleSubmit(data: LoginData){
+    await signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password
+    },
+    {
+      onRequest: () => {},
+      onResponse: () => {},
+      onError: (ctx : ErrorContext) => {
+        console.log(ctx.error.message)
+      },
+      onSuccess: () => {}
+    })
+  }
+
 
   return (
     <div className='space-y-6 p-10 rounded-lg w-md flex justify-center shadow-2xl flex-col max-w-sm'>
         <Form {...form}>
         <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="w-full max-w-sm space-y-6"
         >
             <FormField
