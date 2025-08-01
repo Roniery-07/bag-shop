@@ -15,8 +15,9 @@ import {
 } from '@/components/ui/form';
 
 import { Input } from '@/components/ui/input';
-import { signUp } from '@/lib/auth-client';
-import { ErrorContext } from 'better-auth/react';
+import { signUpEmailAction } from '@/actions/sign-up-email.actions';
+import { redirect } from 'next/navigation';
+import { useAuth } from '@/lib/context/authContext';
 
 const schema = z.object({
   name: z.string().min(4, {message: 'Mín. 4 caracteres'}),
@@ -24,29 +25,27 @@ const schema = z.object({
   password: z.string().min(6, { message: 'Mín. 6 caracteres' }),
 });
 
-type LoginData = z.infer<typeof schema>;
+export type RegisterData = z.infer<typeof schema>;
 
 export default function RegisterForm() {
-
-  const form = useForm<LoginData>({
+  const {setSigned} = useAuth()
+  const form = useForm<RegisterData>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', email: '', password: '' },
   });
 
-  async function handleSubmit(data: LoginData){
-    await signUp.email({
-      name: data.name,
-      email: data.email,
-      password: data.password
-    },
-    {
-      onRequest: () => {},
-      onResponse: () => {},
-      onError: (ctx : ErrorContext) => {
-        console.log(ctx.error.message)
-      },
-      onSuccess: () => {}
-    })
+  async function handleSubmit(e : React.FormEvent<HTMLFormElement>){
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
+
+    const {error} = await signUpEmailAction(formData)
+
+    if(!error) {
+      setSigned(true)
+      redirect("/")
+    }
+    console.log(error)
   }
 
 
@@ -54,7 +53,7 @@ export default function RegisterForm() {
     <div className='space-y-6 p-10 rounded-lg w-md flex justify-center shadow-2xl flex-col max-w-sm'>
         <Form {...form}>
         <form
-            onSubmit={form.handleSubmit(handleSubmit)}
+            onSubmit={handleSubmit}
             className="w-full max-w-sm space-y-6"
         >
             <FormField
@@ -114,7 +113,7 @@ export default function RegisterForm() {
             />
 
             <Button type="submit" className="w-full  bg-pink-400 text-white font-bold">
-            Log in
+            Register
             </Button>
           
         </form>
