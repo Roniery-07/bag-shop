@@ -21,9 +21,10 @@ export default async function ProductPage({ params }: PageProps) {
     const p = await params
 
     console.log("fetching: ")
-    const repo = ProductRepositoryPrisma.create(prisma)
-    const getProductUsecase = GetProductUsecase.create(repo)
-    const product = await getProductUsecase.execute({id: p.id})
+    const productRepo = ProductRepositoryPrisma.create(prisma);
+    const getProduct  = GetProductUsecase.create(productRepo);
+
+      const product = await getProduct.execute({ id: p.id });
 
     if (!product) notFound();
 
