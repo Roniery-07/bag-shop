@@ -1,12 +1,13 @@
-import NextAuth from "next-auth";
-import {authConfig} from "@/infrastructure/auth/auth.config"
-import {PrismaAdapter} from "@auth/prisma-adapter"
-import { prisma } from "@/lib/db/prisma";
+import {betterAuth} from "better-auth"
+import {prismaAdapter} from "better-auth/adapters/prisma"
+import { prisma } from "./db/prisma"
 
- 
-export const { auth, handlers, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
-  ...authConfig,
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, {
+    provider: "postgresql"
+  }),
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 6
+  },
 })
-
