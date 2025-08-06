@@ -52,7 +52,7 @@ export  function ProductSection({
   };
 
   return (
-    <div className="relative w-4xl">
+    <div className="relative w-5xl">
       {/* contador (exemplo do original) */}
       <p className="sr-only">Total updates: {updateCount}</p>
 

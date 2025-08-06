@@ -41,7 +41,7 @@ export default function Home() {
       <BannerSection />
       <section className="bg-neutral-200 p-10 mt-10 flex justify-center items-center flex-col">
         <h1 className="text-2xl text-center mb-11 font-bold">Ofertas e Lançamentos</h1>
-        <ProductSection products={products} itemsPerPage={4} />
+        <ProductSection products={products} itemsPerPage={5} />
       </section>
       <section className="py-6 flex flex-col mx-auto justify-center items-center">
         <h1 className="text-2xl text-center mb-11 font-bold">Categorias</h1>
