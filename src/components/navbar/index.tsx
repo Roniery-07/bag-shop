@@ -1,7 +1,14 @@
+"use client"
 import React from 'react';
 import Link from 'next/link';
+import { ShoppingBag, LogIn, LogOut } from 'lucide-react';
+import { useAuth } from '@/lib/context/authContext';
+
+
 
 const Navbar: React.FC = () => {
+    const {signed} = useAuth()
+
     return (
     <nav className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 md:px-16 py-4 bg-pink-200 ">
         <ul className="hidden md:flex gap-6 font-medium text-pink-800">
@@ -16,9 +23,34 @@ const Navbar: React.FC = () => {
             placeholder="Buscar bolsas..."
             className="px-4 py-2 rounded-xl w-full md:w-64 text-sm text-brown-900 focus:outline-none"
           />
-          <button className="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600 w-full md:w-auto">
-            Minha Sacola
-          </button>
+					{(signed) ? 
+						(
+							<button className="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600 w-full md:w-auto">
+								<div className='flex gap-2 justify-center items-center' >
+									<p className='text-sm text-center '>Log Out</p>
+									<LogOut/>
+								</div>
+							</button>
+
+						)	:
+						(
+
+							<Link
+								href="/auth/login"
+								className="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600 w-full md:w-auto flex gap-2 justify-center items-center"
+							>
+								<p className="text-sm text-center">Log In</p>
+								<LogIn />
+							</Link>
+						)
+					}
+
+					<Link
+						href="/"
+						className="bg-pink-500 text-white px-4 py-2 rounded-xl hover:bg-pink-600 w-full md:w-auto flex gap-2 justify-center items-center"
+					>
+						<ShoppingBag />
+					</Link>	
         </div>
       </nav>
     );  
