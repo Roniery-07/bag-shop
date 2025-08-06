@@ -16,6 +16,9 @@ import {
 
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { signInEmailAction } from '@/actions/sign-in-email.actions';
+import { useAuth } from '@/lib/context/authContext';
 
 const schema = z.object({
   email: z.string().email({ message: 'E-mail inválido' }),
@@ -25,21 +28,27 @@ const schema = z.object({
 type LoginData = z.infer<typeof schema>;
 
 export default function LoginForm() {
+  const {setSigned} = useAuth()
 
   const form = useForm<LoginData>({
     resolver: zodResolver(schema),
     defaultValues: {email: '', password: '' },
   });
 
-  const onSubmit = (data: LoginData) => {
-    console.log('Login OK', data);
-  };
-
+  async function handleSubmit(formData : LoginData){
+    const {error} = await signInEmailAction(formData)
+    if(!error) {
+      setSigned(true)
+      redirect("/")
+    }
+    console.log(error)
+  }
+  
   return (
     <div className='space-y-6 p-10 rounded-lg w-md flex justify-center shadow-2xl flex-col max-w-sm'>
         <Form {...form}>
         <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="w-full max-w-sm space-y-6"
         >
             <FormField

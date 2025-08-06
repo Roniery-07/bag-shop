@@ -5,24 +5,25 @@
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth/api";
 import { BetterAuthAuthenticator, RegisterPropsBody } from "@/infrastructure/auth/BetterAuthAuthenticator";
+import { z } from "zod";
 
-export async function signUpEmailAction(formData: FormData) {
-  const name = String(formData.get("name"));
-  if (!name) return { error: "Please enter your name" };
+const registerSchema = z.object({
+  name: z.string().min(4, {message: 'Mín. 4 caracteres'}),
+  email: z.string().email({ message: 'E-mail inválido' }),
+  password: z.string().min(6, { message: 'Mín. 6 caracteres' }),
+});
 
-  const email = String(formData.get("email"));
-  if (!email) return { error: "Please enter your email" };
+type RegisterData = z.infer<typeof registerSchema>;
 
-  const password = String(formData.get("password"));
-  if (!password) return { error: "Please enter your password" };
-
-  const authenticator = BetterAuthAuthenticator.create(auth)  
-  const props : RegisterPropsBody = {
-    name,
-    email,
-    password
+export async function signUpEmailAction(data: RegisterData) {
+  const parse = registerSchema.safeParse(data)
+  if (!parse.success) {
+    return { error: parse.error.errors[0].message };
   }
 
+  const authenticator = BetterAuthAuthenticator.create(auth);
+
+  const props: RegisterPropsBody = parse.data;
   try {
     await authenticator.register(props);
 

@@ -29,17 +29,16 @@ export type RegisterData = z.infer<typeof schema>;
 
 export default function RegisterForm() {
   const {setSigned} = useAuth()
+  
   const form = useForm<RegisterData>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', email: '', password: '' },
   });
 
-  async function handleSubmit(e : React.FormEvent<HTMLFormElement>){
-    e.preventDefault()
+  async function handleSubmit(data: RegisterData){
 
-    const formData = new FormData(e.currentTarget)
 
-    const {error} = await signUpEmailAction(formData)
+    const {error} = await signUpEmailAction(data)
 
     if(!error) {
       setSigned(true)
@@ -53,7 +52,7 @@ export default function RegisterForm() {
     <div className='space-y-6 p-10 rounded-lg w-md flex justify-center shadow-2xl flex-col max-w-sm'>
         <Form {...form}>
         <form
-            onSubmit={handleSubmit}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="w-full max-w-sm space-y-6"
         >
             <FormField
