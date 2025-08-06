@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <div className="flex flex-col ">
       <BannerSection />
-      <section className="bg-neutral-200 p-10 mt-10 flex justify-center items-center flex-col">
+      <section className=" bg-pink-300/70 p-10 mt-10 flex justify-center items-center flex-col">
         <h1 className="text-2xl text-center mb-11 font-bold">Ofertas e Lançamentos</h1>
         <ProductSection products={products} itemsPerPage={5} />
       </section>
