@@ -6,13 +6,13 @@ import Link from 'next/link';
 export default function BannerSection() {
   return (
     <div className="relative h-[60vh] w-full overflow-hidden rounded-b-3xl bg-pink-50">
-      <Image
-        src="/banners/hero.webp" /* troque pelo seu asset */
+      {/* <Image
+        src="/banners/hero.webp" 
         alt="Coleção primavera-verão"
         fill
         priority
         className="object-cover object-center"
-      />
+      /> */}
 
       {/* CTA centralizado */}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-pink-950/10 backdrop-blur-[2px]">

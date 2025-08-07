@@ -7,14 +7,14 @@ export const CategorySection = () => {
     {
       id: 'acessorios',
       name: 'Acessórios',
-      image: '/categories/acessorios.webp',
+      image: '/static/lunch-box-category.jpg',
       description: 'Brincos, colares e mais detalhes que fazem a diferença.',
       cta: 'Ver acessórios',
     },
     {
       id: 'roupas',
       name: 'Roupas',
-      image: '/categories/roupas.webp',
+      image: '/static/wallet-category.jpg',
       description: 'Peças confortáveis e estilosas para todas as ocasiões.',
       cta: 'Ver roupas',
     },

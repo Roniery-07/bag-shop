@@ -47,7 +47,7 @@ export default async function ProductPage({ params }: PageProps) {
         Continuar comprando
       </Link>
 
-      <div className="grid gap-10 md:grid-cols-12">
+      <div className="grid gap-10 md:grid-cols-12 ">
         {/* ---------- Galeria ---------- */}
         <section className="md:col-span-5">
           <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-pink-100">

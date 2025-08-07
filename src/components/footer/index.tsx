@@ -80,7 +80,7 @@ export default function Footer() {
         </ul>
 
         {/* Payment methods (exemplo genérico) */}
-        <div className="flex flex-wrap items-center justify-center gap-4">
+        {/* <div className="flex flex-wrap items-center justify-center gap-4">
           <Image
             src="/payments/visa.svg"
             alt="Visa"
@@ -109,7 +109,7 @@ export default function Footer() {
             height={24}
             className="opacity-80"
           />
-        </div>
+        </div> */}
 
         {/* Copyright */}
         <p className="text-xs text-pink-700">
