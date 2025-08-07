@@ -20,15 +20,14 @@ export async function signInEmailAction(data: LoginData) {
     return { error: parse.error.errors[0].message };
   }
 
-  /* ❷ Autenticação */
   const authenticator = BetterAuthAuthenticator.create(auth);
   const props: SignInPropsBody = parse.data; // { email, password }
 
   try {
-    await authenticator.signIn(props);
+    const x = await authenticator.signIn(props);
+    console.log(x)
     return { error: null };
   } catch (err) {
-    /* ❸ Tradução de erros da API */
     if (err instanceof APIError) {
       const code = err.body?.code ?? "UNKNOWN";
       if (code === "UNAUTHORIZED") {
