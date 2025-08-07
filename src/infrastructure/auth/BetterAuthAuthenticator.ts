@@ -1,5 +1,5 @@
-import { User } from "@/domain/model/user/entity/user"
 import { betterAuth } from "better-auth"
+import { headers } from "next/headers"
 
 export type SignInPropsBody = {
     email: string,
@@ -20,7 +20,7 @@ export interface Authenticator {
     // user: User
     register: (registerProps: RegisterPropsBody) => Promise<object>
     signIn: (signInProps : SignInPropsBody) => Promise<object>
-    // signOut: () => Promise<void>
+    signOut: () => Promise<{success: boolean}>
     // isSignedIn: () => Promise<
 }
 
@@ -33,18 +33,20 @@ export class BetterAuthAuthenticator implements Authenticator {
     }
 
     public async register(props : RegisterPropsBody){
-        const x  = await this.betterAuth.api.signUpEmail({
+        return await this.betterAuth.api.signUpEmail({
             body: props
         })
-
-        return x
     }
 
     public async signIn (props : SignInPropsBody) {
-        const x = await this.betterAuth.api.signInEmail({
+        return await this.betterAuth.api.signInEmail({
             body: props
         })
+    }
 
-        return x
+    public async signOut(){
+        return await this.betterAuth.api.signOut({
+            headers: await headers()
+        });
     }
 }

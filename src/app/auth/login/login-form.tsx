@@ -16,9 +16,9 @@ import {
 
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { signInEmailAction } from '@/actions/sign-in-email.actions';
 import { useAuth } from '@/lib/context/authContext';
+import { useRouter } from 'next/router';
 
 const schema = z.object({
   email: z.string().email({ message: 'E-mail inválido' }),
@@ -29,7 +29,7 @@ type LoginData = z.infer<typeof schema>;
 
 export default function LoginForm() {
   const {setSigned} = useAuth()
-
+  const router = useRouter()
   const form = useForm<LoginData>({
     resolver: zodResolver(schema),
     defaultValues: {email: '', password: '' },
@@ -39,7 +39,7 @@ export default function LoginForm() {
     const {error} = await signInEmailAction(formData)
     if(!error) {
       setSigned(true)
-      redirect("/")
+      router.push("/")
     }
     console.log(error)
   }

@@ -24,8 +24,7 @@ export async function signInEmailAction(data: LoginData) {
   const props: SignInPropsBody = parse.data; // { email, password }
 
   try {
-    const x = await authenticator.signIn(props);
-    console.log(x)
+    await authenticator.signIn(props);
     return { error: null };
   } catch (err) {
     if (err instanceof APIError) {

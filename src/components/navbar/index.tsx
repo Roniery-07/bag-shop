@@ -12,11 +12,13 @@ import {
   LogOut,
 } from 'lucide-react';
 import { useAuth } from '@/lib/context/authContext';
+import { signOutAction } from '@/actions/sign-out-email.actions';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const { signed } = useAuth();
+  const { signed, setSigned } = useAuth();
   const [open, setOpen] = useState(false);
-
+  const router = useRouter()
   /* Links principais – edite se precisar */
   const links = [
     { href: '/', label: 'Início' },
@@ -24,6 +26,14 @@ export default function Navbar() {
     { href: '/categories', label: 'Categorias' },
     { href: '/contact', label: 'Contato' },
   ];
+
+  async function handleLogout() {
+    const { error } = await signOutAction();
+    if (!error) {
+      setSigned(false);        // atualiza contexto
+      router.push("/auth/login");   // redireciona
+    }
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-pink-200 bg-white/90 backdrop-blur-md">
@@ -62,7 +72,7 @@ export default function Navbar() {
           {/* Login / Logout */}
           {signed ? (
             <button
-              onClick={() => console.log('logout')}
+              onClick={handleLogout}
               className="hidden items-center gap-1 rounded-full bg-pink-400 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-pink-500 md:flex"
             >
               <LogOut className="h-4 w-4" /> Sair
