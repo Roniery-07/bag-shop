@@ -100,7 +100,7 @@ export default function LoginForm() {
             <p className='text-sm p-0 text-center'>Not subscribed yet?</p>
 
             <Button type="button" className="w-full bg-pink-400 font-bold text-white" >
-            <Link href={"/register"}>Register</Link>
+            <Link href={"/auth/register"}>Register</Link>
             </Button>
       </div>
     </div>
