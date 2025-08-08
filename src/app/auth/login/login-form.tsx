@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { signInEmailAction } from '@/actions/sign-in-email.actions';
 import { useAuth } from '@/lib/context/authContext';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const schema = z.object({
   email: z.string().email({ message: 'E-mail inválido' }),
@@ -41,7 +41,6 @@ export default function LoginForm() {
       setSigned(true)
       router.push("/")
     }
-    console.log(error)
   }
   
   return (
