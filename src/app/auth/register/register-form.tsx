@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/form';
 
 import { Input } from '@/components/ui/input';
-import { signUpEmailAction } from '@/actions/sign-up-email.actions';
+import { registerEmailAction } from '@/actions/register-email.actions';
 import { redirect } from 'next/navigation';
 import { useAuth } from '@/lib/context/authContext';
 
@@ -29,18 +29,14 @@ export type RegisterData = z.infer<typeof schema>;
 
 export default function RegisterForm() {
   const {setSigned} = useAuth()
+  
   const form = useForm<RegisterData>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', email: '', password: '' },
   });
 
-  async function handleSubmit(e : React.FormEvent<HTMLFormElement>){
-    e.preventDefault()
-
-    const formData = new FormData(e.currentTarget)
-
-    const {error} = await signUpEmailAction(formData)
-
+  async function handleSubmit(data: RegisterData){
+    const {error} = await registerEmailAction(data)
     if(!error) {
       setSigned(true)
       redirect("/")
@@ -53,7 +49,7 @@ export default function RegisterForm() {
     <div className='space-y-6 p-10 rounded-lg w-md flex justify-center shadow-2xl flex-col max-w-sm'>
         <Form {...form}>
         <form
-            onSubmit={handleSubmit}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="w-full max-w-sm space-y-6"
         >
             <FormField

@@ -1,8 +1,26 @@
-import NextAuth from 'next-auth';
-import { authConfig} from './infrastructure/auth/auth.config';
- 
-export default NextAuth(authConfig).auth;
- 
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
+
+const protectedRoutes = ["/profile", "/manager"];
+
+export async function middleware(req: NextRequest) {
+  const { nextUrl } = req;
+  const sessionCookie = getSessionCookie(req);
+
+  const res = NextResponse.next();
+
+  const isLoggedIn = !!sessionCookie;
+  const isOnProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
+
+  if (isOnProtectedRoute && !isLoggedIn) {
+    return NextResponse.redirect(new URL("/auth/login", req.url));
+  }
+
+  return res;
+}
+
 export const config = {
-  matcher: ['/manager/:path*'],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+  ],
 };

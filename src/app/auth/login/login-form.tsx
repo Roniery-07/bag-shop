@@ -16,6 +16,9 @@ import {
 
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import { signInEmailAction } from '@/actions/sign-in-email.actions';
+import { useAuth } from '@/lib/context/authContext';
+import { useRouter } from 'next/navigation';
 
 const schema = z.object({
   email: z.string().email({ message: 'E-mail inválido' }),
@@ -25,21 +28,26 @@ const schema = z.object({
 type LoginData = z.infer<typeof schema>;
 
 export default function LoginForm() {
-
+  const {setSigned} = useAuth()
+  const router = useRouter()
   const form = useForm<LoginData>({
     resolver: zodResolver(schema),
     defaultValues: {email: '', password: '' },
   });
 
-  const onSubmit = (data: LoginData) => {
-    console.log('Login OK', data);
-  };
-
+  async function handleSubmit(formData : LoginData){
+    const {error} = await signInEmailAction(formData)
+    if(!error) {
+      setSigned(true)
+      router.push("/")
+    }
+  }
+  
   return (
     <div className='space-y-6 p-10 rounded-lg w-md flex justify-center shadow-2xl flex-col max-w-sm'>
         <Form {...form}>
         <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="w-full max-w-sm space-y-6"
         >
             <FormField
@@ -88,11 +96,9 @@ export default function LoginForm() {
         </Form>
 
       <div className='flex flex-col gap-1'>
-            <p className='text-sm p-0 text-center'>Not subscribed yet?</p>
-
-            <Button type="button" className="w-full bg-pink-400 font-bold text-white" >
-            <Link href={"/register"}>Register</Link>
-            </Button>
+        <p className='text-sm p-0 text-center'>Not subscribed yet? 
+          <Link href={"/auth/register"} className='text-pink-500 font-medium hover:underline hover:transform '> Register</Link>
+        </p>
       </div>
     </div>
   );
