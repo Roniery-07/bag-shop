@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/form';
 
 import { Input } from '@/components/ui/input';
-import { signUpEmailAction } from '@/actions/sign-up-email.actions';
+import { registerEmailAction } from '@/actions/register-email.actions';
 import { redirect } from 'next/navigation';
 import { useAuth } from '@/lib/context/authContext';
 
@@ -36,10 +36,7 @@ export default function RegisterForm() {
   });
 
   async function handleSubmit(data: RegisterData){
-
-
-    const {error} = await signUpEmailAction(data)
-
+    const {error} = await registerEmailAction(data)
     if(!error) {
       setSigned(true)
       redirect("/")
