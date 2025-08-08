@@ -1,30 +1,10 @@
+import { AuthGateway, SignInProps, RegisterProps } from "@/domain/auth/auth.gateway"
 import { betterAuth } from "better-auth"
 import { headers } from "next/headers"
 
-export type SignInPropsBody = {
-    email: string,
-    password: string
-}
-
-export type RegisterPropsBody = {
-    name: string,
-    email: string,
-    password: string
-}
-
-export type SignOutProps = void;
-
 export type BetterAuthType = ReturnType< typeof betterAuth>
 
-export interface Authenticator {
-    // user: User
-    register: (registerProps: RegisterPropsBody) => Promise<object>
-    signIn: (signInProps : SignInPropsBody) => Promise<object>
-    signOut: () => Promise<{success: boolean}>
-    // isSignedIn: () => Promise<
-}
-
-export class BetterAuthAuthenticator implements Authenticator {
+export class BetterAuthAuthenticator implements AuthGateway {
 
     private constructor(private betterAuth : BetterAuthType){}
 
@@ -32,21 +12,29 @@ export class BetterAuthAuthenticator implements Authenticator {
         return new BetterAuthAuthenticator(betterAuth)
     }
 
-    public async register(props : RegisterPropsBody){
+    public async register(props : RegisterProps) : Promise<object>{
         return await this.betterAuth.api.signUpEmail({
             body: props
         })
     }
 
-    public async signIn (props : SignInPropsBody) {
+    public async signIn (props : SignInProps) : Promise<object> {
         return await this.betterAuth.api.signInEmail({
             body: props
         })
     }
 
-    public async signOut(){
-        return await this.betterAuth.api.signOut({
+    public async signOut() : Promise<void>{
+        await this.betterAuth.api.signOut({
             headers: await headers()
         });
+    }
+
+    public async isSignedIn(): Promise<boolean> {
+        const session = await this.betterAuth.api.getSession({
+            headers: await headers()
+        })
+
+        return !!session ;
     }
 }

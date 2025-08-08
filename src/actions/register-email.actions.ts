@@ -4,8 +4,10 @@
 
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth/api";
-import { BetterAuthAuthenticator, RegisterPropsBody } from "@/infrastructure/auth/BetterAuthAuthenticator";
 import { z } from "zod";
+import { BetterAuthAuthenticator } from "@/infrastructure/auth/BetterAuthAuthenticator";
+import { RegisterUsecase } from "@/usecases/auth/register.usecase";
+
 
 const registerSchema = z.object({
   name: z.string().min(4, {message: 'Mín. 4 caracteres'}),
@@ -15,17 +17,17 @@ const registerSchema = z.object({
 
 type RegisterData = z.infer<typeof registerSchema>;
 
-export async function signUpEmailAction(data: RegisterData) {
+export async function registerEmailAction(data: RegisterData) {
   const parse = registerSchema.safeParse(data)
   if (!parse.success) {
     return { error: parse.error.errors[0].message };
   }
-
+  
   const authenticator = BetterAuthAuthenticator.create(auth);
+  const usecase = RegisterUsecase.create(authenticator)
 
-  const props: RegisterPropsBody = parse.data;
   try {
-    await authenticator.register(props);
+    await usecase.execute(parse.data);
 
     return { error: null };
   } catch (err) {
