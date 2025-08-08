@@ -96,11 +96,9 @@ export default function LoginForm() {
         </Form>
 
       <div className='flex flex-col gap-1'>
-            <p className='text-sm p-0 text-center'>Not subscribed yet?</p>
-
-            <Button type="button" className="w-full bg-pink-400 font-bold text-white" >
-            <Link href={"/auth/register"}>Register</Link>
-            </Button>
+        <p className='text-sm p-0 text-center'>Not subscribed yet? 
+          <Link href={"/auth/register"} className='text-pink-500 font-medium hover:underline hover:transform '> Register</Link>
+        </p>
       </div>
     </div>
   );
