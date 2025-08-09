@@ -28,7 +28,7 @@ const schema = z.object({
 type LoginData = z.infer<typeof schema>;
 
 export default function LoginForm() {
-  const {setSigned} = useAuth()
+  const {refresh} = useAuth()
   const router = useRouter()
   const form = useForm<LoginData>({
     resolver: zodResolver(schema),
@@ -38,7 +38,7 @@ export default function LoginForm() {
   async function handleSubmit(formData : LoginData){
     const {error} = await signInEmailAction(formData)
     if(!error) {
-      setSigned(true)
+      await refresh()
       router.push("/")
     }
   }

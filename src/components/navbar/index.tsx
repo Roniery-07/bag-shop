@@ -16,7 +16,7 @@ import { signOutAction } from '@/actions/sign-out-email.actions';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const { signed, setSigned } = useAuth();
+  const { isAuthenticated, setUser } = useAuth();
   const [open, setOpen] = useState(false);
   const router = useRouter()
   /* Links principais – edite se precisar */
@@ -30,7 +30,7 @@ export default function Navbar() {
   async function handleLogout() {
     const { error } = await signOutAction();
     if (!error) {
-      setSigned(false);        // atualiza contexto
+      setUser(null);        // atualiza contexto
       router.push("/auth/login");   // redireciona
     }
   }
@@ -70,7 +70,7 @@ export default function Navbar() {
           </div>
 
           {/* Login / Logout */}
-          {signed ? (
+          {isAuthenticated ? (
             <button
               onClick={handleLogout}
               className="hidden items-center gap-1 rounded-full bg-pink-400 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-pink-500 md:flex"
@@ -139,7 +139,7 @@ export default function Navbar() {
             ))}
 
             <li className="flex items-center gap-2">
-              {signed ? (
+              {isAuthenticated ? (
                 <button
                   onClick={() => {
                     console.log('logout');
