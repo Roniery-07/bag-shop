@@ -22,6 +22,9 @@ export class UserRepositoryPrisma implements UserGateway{
     public async list() : Promise<User[]> {
         const users = await this.prismaClient.user.findMany();
 
+        if(!users) 
+            throw new Error("No users found!")
+
         const usersList = users.map(u => {
             const user = User.with({
                 id: u.id,
@@ -32,5 +35,19 @@ export class UserRepositoryPrisma implements UserGateway{
         })
 
         return usersList
+    }
+
+    public async get(entityId: string): Promise<User> {
+        const user = await this.prismaClient.user.findUnique({where: {id: entityId}})
+        
+        if(!user) 
+            throw new Error("User not found")
+        
+
+        return User.with({
+            id: user.id,
+            email: user.email,
+            name: user.name ?? ""
+        })
     }
 }
