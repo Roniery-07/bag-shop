@@ -9,33 +9,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product{
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name String
-  price Decimal
+model Product {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  price       Decimal
   description String?
-  createdAt DateTime @default(now())    
-  quantity Int
-  images ProductImages[] 
+  createdAt   DateTime        @default(now())
+  quantity    Int
+  images      ProductImages[]
+  CartItem    CartItem[]
 
   @@map("products")
 }
 
-model ProductImages{
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  url String 
-  alt String?
-  order Int?
-  product Product @relation(fields: [productId], references: [id]) 
-  productId String @db.Uuid
+model ProductImages {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  url       String
+  alt       String?
+  order     Int?
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String   @db.Uuid
   createdAt DateTime @default(now())
 
   @@map("product_images")
 }
 
-
 model User {
-  id        String   @id
+  id        String   @id 
   createdAt DateTime
   updatedAt DateTime
 
@@ -46,6 +46,7 @@ model User {
 
   sessions Session[]
   accounts Account[]
+  Cart     Cart?
 
   @@map("users")
 }
@@ -82,7 +83,7 @@ model Account {
   password              String?
 
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) 
 
   @@map("accounts")
 }
@@ -97,4 +98,24 @@ model Verification {
   expiresAt  DateTime
 
   @@map("verifications")
+}
+
+model Cart {
+  id       String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  CartItem CartItem[]
+  user     User        @relation(fields: [userId], references: [id])
+  userId   String      @unique @db.Uuid
+
+  @@map("carts")
+}
+
+model CartItem {
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.Uuid
+  quantity  Int
+
+  @@id([cartId, productId])
+  @@map("cart_items")
 }
