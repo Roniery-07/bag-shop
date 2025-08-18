@@ -17,7 +17,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { registerEmailAction } from '@/actions/register-email.actions';
 import { redirect } from 'next/navigation';
-import { useAuth } from '@/lib/context/authContext';
 
 const schema = z.object({
   name: z.string().min(4, {message: 'Mín. 4 caracteres'}),
@@ -28,7 +27,6 @@ const schema = z.object({
 export type RegisterData = z.infer<typeof schema>;
 
 export default function RegisterForm() {
-  const {setSigned} = useAuth()
   
   const form = useForm<RegisterData>({
     resolver: zodResolver(schema),
@@ -38,7 +36,6 @@ export default function RegisterForm() {
   async function handleSubmit(data: RegisterData){
     const {error} = await registerEmailAction(data)
     if(!error) {
-      setSigned(true)
       redirect("/")
     }
     console.log(error)
