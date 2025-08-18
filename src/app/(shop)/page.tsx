@@ -8,7 +8,7 @@ import { CategorySection } from "@/components/category-section"
 
 
 export default function Home() {
-  const {setSigned} = useAuth()
+  const {setUser} = useAuth()
   const [products, setProducts] = useState([])
 
   useEffect(() => {
@@ -16,14 +16,14 @@ export default function Home() {
     try {
         const res = await fetch('/api/session')
         if (res.ok) {
-        const session = await res.json()
-        if (session) setSigned(true)
+        const user = await res.json()
+        if (user) setUser(user)
         } else {
-            setSigned(false)
+            setUser(null)
         }
     } catch (e) {
         console.error('Erro ao verificar sessão:', e)
-        setSigned(false)
+        setUser(null)
       }
     }
     const fetchProducts = async () => {
@@ -34,7 +34,7 @@ export default function Home() {
     fetchProducts().then(setProducts).catch(console.error)
     checkSession()
    
-  }, [setSigned])
+  }, [setUser])
 
   return (
     <div className="flex flex-col ">
