@@ -1,4 +1,5 @@
 import { AuthGateway, SignInProps, RegisterProps } from "@/domain/auth/auth.gateway"
+import { User } from "@/domain/model/user/entity/user"
 import { betterAuth } from "better-auth"
 import { headers } from "next/headers"
 
@@ -13,9 +14,21 @@ export class BetterAuthAuthenticator implements AuthGateway {
     }
 
     public async register(props : RegisterProps) : Promise<object>{
-        return await this.betterAuth.api.signUpEmail({
+        const data = await this.betterAuth.api.signUpEmail({
             body: props
         })
+        try{
+
+            const user = User.with({
+                id: data.user.id,
+                email: data.user.email,
+                name: data.user.name,
+            })
+            return user;
+        }
+        catch{
+            return {};
+        }
     }
 
     public async signIn (props : SignInProps) : Promise<object> {

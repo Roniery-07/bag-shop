@@ -7,6 +7,10 @@ import { APIError } from "better-auth/api";
 import { z } from "zod";
 import { BetterAuthAuthenticator } from "@/infrastructure/auth/BetterAuthAuthenticator";
 import { RegisterUsecase } from "@/usecases/auth/register.usecase";
+import { prisma } from "@/lib/db/prisma";
+import { CartRepositoryPrisma } from "@/infrastructure/repositories/cart/cart.repository.prisma";
+import { CreateCartUsecase } from "@/usecases/cart/create-cart.usecase";
+import { User } from "@/domain/model/user/entity/user";
 
 
 const registerSchema = z.object({
@@ -24,11 +28,13 @@ export async function registerEmailAction(data: RegisterData) {
   }
   
   const authenticator = BetterAuthAuthenticator.create(auth);
-  const usecase = RegisterUsecase.create(authenticator)
+  const regUsecase = RegisterUsecase.create(authenticator)
 
+  const cartRepo = CartRepositoryPrisma.create(prisma)
+  const createCartUsecase = CreateCartUsecase.create(cartRepo)
   try {
-    await usecase.execute(parse.data);
-
+    const user = await regUsecase.execute(parse.data) as User;
+    await createCartUsecase.execute({userId: user.id})
     return { error: null };
   } catch (err) {
     if (err instanceof APIError) {
