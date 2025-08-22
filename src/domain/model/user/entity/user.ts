@@ -1,7 +1,10 @@
+import { Cart } from "@domain/model/cart/entity/cart"
+
 export type UserProps = {
     id: string
     name: string;
     email: string;
+    cart?: Cart
 }
 
 
@@ -9,8 +12,9 @@ export class User{
     private constructor(private props: UserProps){}
 
     public static create(name: string, email: string){
+        const id = crypto.randomUUID().toString()
         return new User({
-            id: crypto.randomUUID().toString(),
+            id,
             name, 
             email,
         })
