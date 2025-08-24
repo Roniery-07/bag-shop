@@ -7,7 +7,7 @@ import { ShoppingCart, Heart } from 'lucide-react';
 
 type ProductImage = { url: string; order?: number };
 export interface Product {
-  id: string | number;
+  id: string;
   name: string;
   price: number;        // em centavos? ajuste conforme
   oldPrice?: number;
@@ -19,6 +19,25 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
+
+  const handleAddToCartClick = async (productId: string, quantity: number) => {
+    const res = await fetch("api/cart/add-product/", {
+      method: "POST",
+      headers: {"ContentType": "application/json"},
+      body: JSON.stringify({productId, quantity})
+    })
+
+    if (res.status === 401) {
+      throw new Error("Você precisa estar logado.");
+    }
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.error ?? "Falha ao adicionar ao carrinho.");
+    }
+  }
+
+
   const cover =
     product.images.find((i) => i.order === 1)?.url || product.images[0]?.url;
 
@@ -75,7 +94,7 @@ export default function ProductCard({ product }: Props) {
 
       {/* ADD-TO-CART aparece no hover */}
       <button
-        onClick={() => console.log('add to cart', product.id)}
+        onClick={() => handleAddToCartClick(product.id, 1)}
         className="absolute bottom-3 right-3 hidden items-center gap-1 rounded-full bg-pink-400 px-3 py-1.5 text-xs font-semibold text-white shadow-md transition hover:bg-pink-500 group-hover:flex"
       >
         <ShoppingCart className="h-4 w-4" />

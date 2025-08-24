@@ -1,24 +1,14 @@
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
+"use client"
+import { useAuth } from '@/lib/context/authContext'
 import React from 'react'
 
-export default async function ProfilePage() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-    if(!session){
-        return (
-            <div>
-                <p className='text-red-700'>Unauthorized</p>
-            </div>
-        )
-    }
-
+export default function ProfilePage() {
+    const {user} = useAuth()
     return (
         <>
             <div>ProfilePage</div>
             <pre className='text-sm overflow-clip'>
-                {JSON.stringify(session, null, 2)}
+                {JSON.stringify(user, null, 2)}
             </pre>
         </>
 

@@ -1,79 +1,150 @@
-"use client"
+"use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { CartRow } from "./cart-row";
-import { useAuth } from "@/lib/context/authContext";
 import { EmptyState } from "./empty-state";
 
-//Remover depois
-export type CartItem = {
-  id: string;
+type ApiImage = { id: string; url: string; alt: string | null; order: number | null };
+type ApiProduct = { id: string; name: string; price: number; quantity: number; images: ApiImage[] };
+type ApiCartItem = { cartId: string; quantity: number; product: ApiProduct };
+type ApiResponse = { entities: ApiCartItem[] };
+
+type UIItem = {
+  id: string;        // productId
   name: string;
-  image: string;
-  price: number; // preço unitário
-  quantity: number;
-  variant?: string; // cor/tamanho
+  image: string;     // primeira imagem (ou placeholder)
+  price: number;     // preço unitário
+  quantity: number;  // quantidade no carrinho
+  variant?: string;  // se quiser adicionar depois (cor/tamanho)
 };
 
-export default function CartPage(){
-    
-    // items to be fetched
-    const {user} = useAuth()
-    const items : Array<object> = []
-    console.log(user)
+export default function CartPage() {
+  const [items, setItems] = useState<UIItem[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    return(
-        <div className="mx-auto max-w-6xl w-full px-4 py-6">
-            <header className="mb-4">
-                <h1 className="text-2xl font-semibold">Seu carrinho</h1>
-                <p className="text-sm text-neutral-500">Revise seus itens e finalize a compra</p>
-            </header>
+  const brl = (v: number) =>
+    new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
-            {items.length === 0 ? (
-                <EmptyState/>
-            ) : 
-            
+  useEffect(() => {
+    let mounted = true;
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+    (async () => {
+      try {
+        const res = await fetch("/api/cart/list", { cache: "no-store" });
 
-                    <section className="col-span-2 ">
-                        <div className="space-y-4 p-1 border border-neutral-200/70 rounded-2xl shadow-sm ">
-                            <ul className="divide-y divide-neutral-200/70">
-                                {/* <CartRow item={item}/>
-                                <CartRow item={item}/> */}
-                            </ul>
-                        </div>
-                    </section>
+        if (res.status === 401) {
+          // usuário não logado
+          if (mounted) setItems([]);
+          return;
+        }
 
-                    <aside className="sticky top-6 h-fit space-y-4">
-                        <div className="border border-neutral-200/70 rounded-2xl shadow-sm p-5">
-                            <h2 className=" text-lg">Resumo</h2>
-                            {/* <div className="flex items-center gap-2">
-                                <input 
-                                    type="text"
-                                    placeholder="Inserir cupom"
-                                    className="h-10 flex-1 rounded-xl border border-neutral-200 bg-white px-3 text-sm outline-none transition placeholder:text-neutral-400"
-                                />
-                                <button className="h-10 min-w-24 p-2 bg-green-300 rounded-md text-sm">Aplicar</button>
-                            </div> */}
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err?.error ?? "Falha ao carregar o carrinho.");
+        }
 
-                            <div className="my-4 h-px bg-neutral-200 dark:bg-neutral-800" />
+        const data: ApiResponse = await res.json();
+        console.log(data)
+        const ui: UIItem[] =
+          data.entities?.map((i) => ({
+            id: i.product.id,
+            name: i.product.name,
+            image: i.product.images?.[0]?.url ?? "/placeholder.png",
+            price: i.product.price,
+            quantity: i.quantity,
+          })) ?? [];
 
-                            <dl>
-                                <div className="flex items-center justify-between text-base">
-                                    <dt className="text-neutral-600">Subtotal</dt>
-                                    <dd className="font-medium">R$ 110</dd>
-                                </div>
+          console.log(ui)
 
-                                <div className="flex items-center justify-between text-base">
-                                    <dt className="font-semibold">Total</dt>
-                                    <dd className="font-semibold">R$ 110</dd>
-                                </div>
-                            </dl>
+        if (mounted) setItems(ui);
+      } catch (e) {
+        if (mounted) setError("Erro inesperado");
+      }
+    })();
 
-                        </div>
-                    </aside>
-                </div>
-            }
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const subtotal = useMemo(
+    () => (items ?? []).reduce((acc, it) => acc + it.price * it.quantity, 0),
+    [items]
+  );
+
+  // Loading
+  if (items === null && !error) {
+    return (
+      <div className="mx-auto max-w-6xl w-full px-4 py-6">
+        <header className="mb-4">
+          <h1 className="text-2xl font-semibold">Seu carrinho</h1>
+          <p className="text-sm text-neutral-500">Carregando...</p>
+        </header>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="col-span-2 space-y-4">
+            <div className="h-28 rounded-2xl bg-neutral-100 animate-pulse" />
+            <div className="h-28 rounded-2xl bg-neutral-100 animate-pulse" />
+          </div>
+          <div className="h-48 rounded-2xl bg-neutral-100 animate-pulse" />
         </div>
-    )
+      </div>
+    );
+  }
+
+  // Erro
+  if (error) {
+    return (
+      <div className="mx-auto max-w-6xl w-full px-4 py-6">
+        <h1 className="text-2xl font-semibold">Seu carrinho</h1>
+        <p className="text-sm text-red-600 mt-2">{error}</p>
+      </div>
+    );
+  }
+
+  const hasItems = (items?.length ?? 0) > 0;
+
+  return (
+    <div className="mx-auto max-w-6xl w-full px-4 py-6">
+      <header className="mb-4">
+        <h1 className="text-2xl font-semibold">Seu carrinho</h1>
+        <p className="text-sm text-neutral-500">Revise seus itens e finalize a compra</p>
+      </header>
+
+      {!hasItems ? (
+        <EmptyState />
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+          <section className="col-span-2 ">
+            <div className="space-y-4 p-1 border border-neutral-200/70 rounded-2xl shadow-sm ">
+              <ul className="divide-y divide-neutral-200/70">
+                {items!.map((item) => (
+                  <CartRow key={item.id} item={item} />
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <aside className="sticky top-6 h-fit space-y-4">
+            <div className="border border-neutral-200/70 rounded-2xl shadow-sm p-5">
+              <h2 className="text-lg">Resumo</h2>
+
+              <div className="my-4 h-px bg-neutral-200" />
+
+              <dl className="space-y-2">
+                <div className="flex items-center justify-between text-base">
+                  <dt className="text-neutral-600">Subtotal</dt>
+                  <dd className="font-medium">{brl(subtotal)}</dd>
+                </div>
+
+                <div className="flex items-center justify-between text-base">
+                  <dt className="font-semibold">Total</dt>
+                  <dd className="font-semibold">{brl(subtotal)}</dd>
+                </div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+      )}
+    </div>
+  );
 }
