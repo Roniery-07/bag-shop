@@ -17,13 +17,36 @@ export class CartRepositoryPrisma implements CartGateway{
 
        await this.prismaClient.cart.create({data})
     }
+
+      async createForUser(userId: string): Promise<Cart> {
+        const cart = Cart.create(userId)
+        const created = await this.prismaClient.cart.create({
+            data: { id: cart.id, userId }, 
+        })
+        return Cart.with({ id: cart.id, userId: cart.userId, cartItems: [] })
+    }
+
+    public async get(cartId : string) : Promise<Cart | null>{
+        const data = await this.prismaClient.cart.findUnique({where: {id: cartId}})
+        if (data == null) return null;
+        const cart = Cart.with({id: data.id, userId: data.userId})
+        return cart;
+    }
     
     public async getByUserId(userId: string): Promise<Cart | null> {
-        const data = await this.prismaClient.cart.findUnique({where: {id: userId}})
+        const data = await this.prismaClient.cart.findUnique({where: {userId: userId}})
         if (data == null) return null
 
         const cart = Cart.with({id: data.id, userId: data.userId})
 
         return cart;
+    }
+
+    public async addProduct(cartId: string, productId: string, quantity: number): Promise<void> {
+        await this.prismaClient.cartItem.upsert({
+            where: {cartId_productId: {cartId, productId}},
+            update: {quantity: quantity},
+            create: {cartId: cartId, productId: productId, quantity: quantity}
+        })
     }
 }
