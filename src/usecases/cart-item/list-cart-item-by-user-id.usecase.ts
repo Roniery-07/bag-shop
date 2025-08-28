@@ -15,12 +15,12 @@ export type ListCartItemByUserIdOutputDto = {
         name: string;
         price: number;
         quantity: number;
-        images: {
+        image: {
             id: string;
             url: string;
             alt: string;
             order: number;
-        }[]
+        }
     }
 }[]
 
@@ -46,12 +46,12 @@ export class ListCartItemByUserIdUsecase implements Usecase<ListCartItemByUserId
                 name: i.product.name,
                 price: i.product.price,
                 quantity: i.product.quantity,
-                images: i.product.images.map((img) => ({
-                    id: img.id,
-                    url: img.url,
-                    alt: img.alt,
-                    order: img.order,
-                })), 
+                image: {
+                    id: i.product.images.at(0)!.id,
+                    url: i.product.images.at(0)!.url,
+                    alt: i.product.images.at(0)!.alt,
+                    order: i.product.images.at(0)!.order,
+                }, 
             }
         })        
     )}
