@@ -63,7 +63,8 @@ export class ProductRepositoryPrisma implements ProductGateway{
                 images: true
             }
         })
-        
+        console.log(product)
+
         if (!product) {
             // lance erro de domínio ou retorne undefined (sua preferência)
             throw new Error(`Product with id: ${id} not found!`);
@@ -84,5 +85,16 @@ export class ProductRepositoryPrisma implements ProductGateway{
                     })
                 )
             })
+    }
+
+    public async decreaseStockQuantity(product: Product): Promise<void> {
+        await this.prismaClient.product.update({
+            where:{
+                id: product.id
+            }, 
+            data:{
+                quantity: product.quantity
+            }
+        })
     }
 }

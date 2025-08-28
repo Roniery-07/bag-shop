@@ -27,6 +27,19 @@ export class Product{
         return new Product(props)
     }
 
+    public increaseQuantity() : void{
+        //adds to stock    
+    }
+
+    public decreaseQuantity(removeQuantity : number) : void{
+        //removes from stock
+        if(removeQuantity < 0) throw new Error("Quantity to remove must be positive");
+        if(this.props.quantity <= 0) throw new Error(`There is not ${this.props.name} in stock`)
+        
+        this.props.quantity -= removeQuantity
+    }
+
+
     public get id(){
         return this.props.id
     }
