@@ -145,6 +145,9 @@ export default function CartPage() {
           </aside>
         </div>
       )}
+       {(items?.length ?? 0) > 0 && (
+              <MobileStickyBar total={subtotal} onCheckout={() => {}} />
+        )}
     </div>
   );
 }
