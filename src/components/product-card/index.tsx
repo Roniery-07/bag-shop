@@ -40,8 +40,6 @@ export default function ProductCard({ product }: Props) {
 
   const cover =
     product.images.find((i) => i.order === 1)?.url || product.images[0]?.url;
-
-  /* formata “R$ 129,90” */
   const format = (value: number) =>
     (value ).toLocaleString('pt-BR', {
       style: 'currency',
@@ -50,13 +48,6 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="group relative w-full max-w-[220px] overflow-hidden rounded-2xl bg-white shadow transition hover:shadow-lg">
-      {/* FAVORITO */}
-      <button
-        aria-label="Favoritar"
-        className="absolute right-3 top-3 z-10 rounded-full bg-white/60 p-1.5 backdrop-blur-md transition hover:bg-white"
-      >
-        <Heart className="h-4 w-4 stroke-pink-500" />
-      </button>
 
       {/* IMAGEM */}
       <Link href={`/products/${product.id}`} className="block">
@@ -95,10 +86,10 @@ export default function ProductCard({ product }: Props) {
       {/* ADD-TO-CART aparece no hover */}
       <button
         onClick={() => handleAddToCartClick(product.id, 1)}
-        className="absolute bottom-3 right-3 hidden items-center gap-1 rounded-full bg-pink-400 px-3 py-1.5 text-xs font-semibold text-white shadow-md transition hover:bg-pink-500 group-hover:flex"
+        className="absolute bottom-3 right-3 hidden items-center gap-1 rounded-full bg-pink-400 px-3 py-1.5 
+          text-xs font-semibold text-white shadow-md transition hover:bg-pink-500 group-hover:flex"
       >
         <ShoppingCart className="h-4 w-4" />
-        Adicionar
       </button>
     </article>
   );
