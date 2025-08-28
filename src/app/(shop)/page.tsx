@@ -1,40 +1,22 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { useAuth } from '@/lib/context/authContext'
 import BannerSection from "@/components/banner-section"
 import { ProductSection } from "@/components/product-section-slick"
 import { CategorySection } from "@/components/category-section"
+import { ProductRepositoryPrisma } from "@/infrastructure/repositories/product/product.repository.prisma"
+import { prisma } from "@/lib/db/prisma"
+import { ListProductUsecase } from "@/usecases/product/list-product.usecases"
 
 
-export default function Home() {
-  const {setUser} = useAuth()
-  const [products, setProducts] = useState([])
+export default async function Home() {
 
-  useEffect(() => {
-    const checkSession = async () => {
-    try {
-        const res = await fetch('/api/session')
-        if (res.ok) {
-        const user = await res.json()
-        if (user) setUser(user)
-        } else {
-            setUser(null)
-        }
-    } catch (e) {
-        console.error('Erro ao verificar sessão:', e)
-        setUser(null)
-      }
-    }
-    const fetchProducts = async () => {
-      const res = await fetch('/api/products')
-      if (!res.ok) throw new Error('Erro ao buscar produtos')
-      return res.json()
-    }
-    fetchProducts().then(setProducts).catch(console.error)
-    checkSession()
+  let products;
+  const fetchProducts = async () => {
+    const productRepo = ProductRepositoryPrisma.create(prisma)
+    const listProductUsecase = ListProductUsecase.create(productRepo)
+    products = await listProductUsecase.execute();
+  }
+  // checkSession()
+  await fetchProducts()
    
-  }, [setUser])
 
   return (
     <div className="flex flex-col ">
