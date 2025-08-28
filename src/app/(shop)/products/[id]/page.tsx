@@ -55,6 +55,7 @@ export default async function ProductPage({ params }: PageProps) {
               src={cover}
               alt={product.name}
               fill
+              sizes='720px 720px'
               priority
               className="object-cover"
             />
