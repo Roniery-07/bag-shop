@@ -3,13 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { CartRow } from "./cart-row";
 import { EmptyState } from "./empty-state";
+import { MobileStickyBar } from "./mobile-sticky-bar";
+import { ListCartItemByUserIdOutputDto } from "@/usecases/cart-item/list-cart-item-by-user-id.usecase";
 
-type ApiImage = { id: string; url: string; alt: string | null; order: number | null };
-type ApiProduct = { id: string; name: string; price: number; quantity: number; images: ApiImage[] };
-type ApiCartItem = { cartId: string; quantity: number; product: ApiProduct };
-type ApiResponse = { entities: ApiCartItem[] };
-
-type UIItem = {
+export type UIItem = {
   id: string;        // productId
   name: string;
   image: string;     // primeira imagem (ou placeholder)
@@ -43,13 +40,14 @@ export default function CartPage() {
           throw new Error(err?.error ?? "Falha ao carregar o carrinho.");
         }
 
-        const data: ApiResponse = await res.json();
+        const data = await res.json();
+
         console.log(data)
         const ui: UIItem[] =
-          data.entities?.map((i) => ({
+          (data.entities as ListCartItemByUserIdOutputDto)?.map((i) => ({
             id: i.product.id,
             name: i.product.name,
-            image: i.product.images?.[0]?.url ?? "/placeholder.png",
+            image: i.product.image.url ?? "/placeholder.png",
             price: i.product.price,
             quantity: i.quantity,
           })) ?? [];
@@ -57,7 +55,7 @@ export default function CartPage() {
           console.log(ui)
 
         if (mounted) setItems(ui);
-      } catch (e) {
+      } catch {
         if (mounted) setError("Erro inesperado");
       }
     })();
@@ -82,10 +80,10 @@ export default function CartPage() {
         </header>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="col-span-2 space-y-4">
-            <div className="h-28 rounded-2xl bg-neutral-100 animate-pulse" />
-            <div className="h-28 rounded-2xl bg-neutral-100 animate-pulse" />
+            <div className="h-28 rounded-2xl bg-neutral-200 animate-pulse" />
+            <div className="h-28 rounded-2xl bg-neutral-200 animate-pulse" />
           </div>
-          <div className="h-48 rounded-2xl bg-neutral-100 animate-pulse" />
+          <div className="h-48 rounded-2xl bg-neutral-200 animate-pulse" />
         </div>
       </div>
     );
