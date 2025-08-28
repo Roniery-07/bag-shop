@@ -1,8 +1,9 @@
 "use client"
 
 import { Trash2, Heart, Minus, Plus} from "lucide-react";
-import { CartItem } from "./page";
+import { UIItem } from "./page";
 import {BRL} from "@/lib/utils/BRL"
+import Image from "next/image";
 
 export function CartRow({
   item,
@@ -10,16 +11,18 @@ export function CartRow({
   onRemove,
   onMoveToWishlist,
 }: {
-  item: CartItem;
+  item: UIItem;
   onUpdateQuantity?: (id: string, qty: number) => void;
   onRemove?: (id: string) => void;
   onMoveToWishlist?: (id: string) => void;
 }) {
+
+  console.log(item.image)
   return (
     <li className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:gap-6">
       <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-neutral-100 sm:h-24 sm:w-24">
         {/* Substitua por <Image/> do Next no seu projeto */}
-        <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+        <Image src={item.image} alt={item.name} className="h-full w-full object-cover" width={200} height={200} />
       </div>
 
       <div className="flex w-full flex-col gap-2">

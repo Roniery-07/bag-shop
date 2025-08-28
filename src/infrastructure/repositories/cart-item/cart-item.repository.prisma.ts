@@ -30,6 +30,7 @@ export class CartItemRepositoryPrisma implements CartItemGateway{
                         images: {
                             select: { id: true, url: true, order: true, alt: true },
                             orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+                            take: 1
                         },
                     },
                 },
