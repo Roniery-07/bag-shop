@@ -12,6 +12,59 @@ export class CartItemRepositoryPrisma implements CartItemGateway{
         return new CartItemRepositoryPrisma(prismaClient)
     }
 
+    public async get(cartId: string, productId: string ) : Promise<CartItem>{
+        const cartRaw = await this.prismaClient.cartItem.findUnique({
+            where: {
+                cartId_productId: {
+                    cartId,
+                    productId
+                }
+            },
+            include: {
+                product: {
+                    select: {
+                        id: true,
+                        name: true,
+                        price: true, // Prisma.Decimal
+                        description: true,
+                        quantity: true,
+                        images: {
+                            select: { id: true, url: true, order: true, alt: true },
+                            orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+                            take: 1
+                        },
+                    },
+                },
+            },
+        })
+
+        if(!cartRaw)
+            throw new Error("Cart item does not exists!")
+
+        const cartItem = CartItem.with({
+            cartId: cartRaw.cartId,
+            quantity: cartRaw.quantity,
+            product: Product.with({
+                id: cartRaw.product.id,
+                name: cartRaw.product.name,
+                price: cartRaw.product.price.toNumber(),
+                quantity: cartRaw.product.quantity,
+                images: cartRaw.product.images.map(img => {
+                    const image = ProductImage.with({
+                        id: img.id,
+                        alt: img.alt ?? "",
+                        order: img?.order ?? 0 ,
+                        productId: cartRaw.productId,
+                        url: img.url
+                    })
+                    return image
+                })
+            }),
+        })
+
+        return cartItem;
+    }
+
     public async listCartItemsByUserId(userId: string): Promise<CartItem[]> {
         const cartRepo = CartRepositoryPrisma.create(this.prismaClient)
         const cart = await cartRepo.getByUserId(userId);
@@ -61,5 +114,21 @@ export class CartItemRepositoryPrisma implements CartItemGateway{
             return cartItem
         })
         return cartItems;
+    }
+
+    public async updateQuantity(newQuantity: number, cartId: string, productId: string) : Promise<number> {
+        const cartUpdate = await this.prismaClient.cartItem.update({
+            where: {
+                cartId_productId: {
+                    cartId: cartId,
+                    productId: productId
+                }
+            },
+            data: {
+                quantity: newQuantity
+            }
+        })
+        console.log("New Quantity: " + cartUpdate.quantity)        
+        return cartUpdate.quantity;
     }
 }
