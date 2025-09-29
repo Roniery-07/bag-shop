@@ -10,18 +10,18 @@ export function CartRow({
   onUpdateQuantity,
   onRemove,
   onMoveToWishlist,
+  isLoading
 }: {
   item: UIItem;
   onUpdateQuantity?: (id: string, qty: number) => void;
   onRemove?: (id: string) => void;
   onMoveToWishlist?: (id: string) => void;
+  isLoading: boolean
 }) {
 
-  console.log(item.image)
   return (
-    <li className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:gap-6">
+    <li className={`flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:gap-6 transition-opacity ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}>
       <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-neutral-100 sm:h-24 sm:w-24">
-        {/* Substitua por <Image/> do Next no seu projeto */}
         <Image src={item.image} alt={item.name} className="h-full w-full object-cover" width={200} height={200} />
       </div>
 
@@ -43,6 +43,7 @@ export function CartRow({
           <Quantity
             value={item.quantity}
             onChange={(q) => onUpdateQuantity?.(item.id, q)}
+            isLoading={isLoading} // ALTERADO: Passa o estado de loading para o componente de quantidade
           />
 
           <div className="flex items-center gap-2">
@@ -69,7 +70,7 @@ export function CartRow({
 }
 
 
-function Quantity({ value, onChange }: { value: number; onChange?: (n: number) => void }) {
+function Quantity({ value, onChange, isLoading }: { value: number; onChange?: (n: number) => void; isLoading: boolean }) { // ALTERADO: Recebe a prop isLoading
   const dec = () => onChange?.(Math.max(1, value - 1));
   const inc = () => onChange?.(value + 1);
 
@@ -78,15 +79,21 @@ function Quantity({ value, onChange }: { value: number; onChange?: (n: number) =
       <button
         aria-label="Diminuir quantidade"
         onClick={dec}
-        className="rounded-lg p-1 transition hover:bg-neutral-100 active:scale-95 dark:hover:bg-neutral-800"
+        disabled={isLoading} // ALTERADO: Desabilita o botão durante o loading
+        className="rounded-lg p-1 transition hover:bg-neutral-100 active:scale-95 disabled:cursor-not-allowed dark:hover:bg-neutral-800"
       >
         <Minus className="h-4 w-4" />
       </button>
-      <span className="w-6 text-center text-sm tabular-nums">{value}</span>
+
+      <span className="w-6 text-center text-sm tabular-nums">
+        {isLoading ? "..." : value}
+      </span>
+      
       <button
         aria-label="Aumentar quantidade"
         onClick={inc}
-        className="rounded-lg p-1 transition hover:bg-neutral-100 active:scale-95 dark:hover:bg-neutral-800"
+        disabled={isLoading} 
+        className="rounded-lg p-1 transition hover:bg-neutral-100 active:scale-95 disabled:cursor-not-allowed dark:hover:bg-neutral-800"
       >
         <Plus className="h-4 w-4" />
       </button>

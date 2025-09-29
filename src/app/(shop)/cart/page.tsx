@@ -15,12 +15,47 @@ export type UIItem = {
   variant?: string;  // se quiser adicionar depois (cor/tamanho)
 };
 
+
 export default function CartPage() {
   const [items, setItems] = useState<UIItem[] | null>(null);
+  const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set())
   const [error, setError] = useState<string | null>(null);
 
   const brl = (v: number) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+
+  const handleQuantityUpdate = async(productId: string, newQuantity: number) => {
+    if (loadingItems.has(productId)) return;
+    try{
+
+      setLoadingItems((prev) => new Set(prev).add(productId))
+      const res = await fetch("/api/cart/update-quantity", {
+        method: "POST",
+        body: JSON.stringify({
+          newQuantity,
+          productId
+        })
+      });
+  
+      setItems(currentItems =>
+        currentItems!.map(item =>
+          item.id === productId ? { ...item, quantity: newQuantity } : item
+        )
+      );
+      const resJson = await res.json();
+      console.log(resJson)
+    }
+    catch(err){
+      console.log(err)
+    }
+    finally{
+      setLoadingItems((prev) => {
+        const next = new Set(prev)
+        next.delete(productId)
+        return next;
+      })
+    }
+  }
 
   useEffect(() => {
     let mounted = true;
@@ -116,7 +151,9 @@ export default function CartPage() {
             <div className="space-y-4 p-1 border border-neutral-200/70 rounded-2xl shadow-sm ">
               <ul className="divide-y divide-neutral-200/70">
                 {items!.map((item) => (
-                  <CartRow key={item.id} item={item} />
+                  <CartRow key={item.id} item={item}
+                    onUpdateQuantity={handleQuantityUpdate}
+                    isLoading={loadingItems.has(item.id)}/>
                 ))}
               </ul>
             </div>
