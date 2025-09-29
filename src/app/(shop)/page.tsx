@@ -8,14 +8,13 @@ import { ListProductUsecase } from "@/usecases/product/list-product.usecases"
 
 export default async function Home() {
 
-  let products;
   const fetchProducts = async () => {
     const productRepo = ProductRepositoryPrisma.create(prisma)
     const listProductUsecase = ListProductUsecase.create(productRepo)
-    products = await listProductUsecase.execute();
+    return await listProductUsecase.execute();
   }
   // checkSession()
-  await fetchProducts()
+  const products = await fetchProducts()
    
 
   return (
