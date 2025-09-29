@@ -87,6 +87,21 @@ export class ProductRepositoryPrisma implements ProductGateway{
             })
     }
 
+    public async getAvailableStockQuantity(productId: string) : Promise<number>{
+        const res = await this.prismaClient.product.findUnique({
+            where: {
+                id: productId
+            },
+            select: {
+                quantity: true
+            }
+        })
+        if(res?.quantity == null)
+            throw new Error("Product quantity is null!")
+
+        return res.quantity;
+    }
+
     public async decreaseStockQuantity(product: Product): Promise<void> {
         await this.prismaClient.product.update({
             where:{
