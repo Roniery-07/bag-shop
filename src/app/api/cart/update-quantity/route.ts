@@ -36,7 +36,7 @@ export async function POST(req : NextRequest){
             productId
         })
 
-        return NextResponse.json({ newQuantity: quantityPersisted}, { status: 201 });
+        return NextResponse.json({quantityPersisted}, { status: 201 });
     }
     catch (err) {
         console.error("POST /api/products/add-to-cart error:", err);

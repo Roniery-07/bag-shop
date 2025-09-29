@@ -131,4 +131,22 @@ export class CartItemRepositoryPrisma implements CartItemGateway{
         console.log("New Quantity: " + cartUpdate.quantity)        
         return cartUpdate.quantity;
     }
+
+    public async delete(cartId: string, productId: string): Promise<boolean> {
+        try{
+            await this.prismaClient.cartItem.delete({
+            where: {
+                cartId_productId: {
+                    cartId,
+                    productId
+                    }
+                }
+            })
+            return true;
+        }
+        catch{
+            return false;
+        }
+    }
+
 }

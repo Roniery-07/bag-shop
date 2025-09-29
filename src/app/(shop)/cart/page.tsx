@@ -15,6 +15,10 @@ export type UIItem = {
   variant?: string;  // se quiser adicionar depois (cor/tamanho)
 };
 
+type UpdateQuantityResponse = {
+  quantityPersisted: number
+}
+
 
 export default function CartPage() {
   const [items, setItems] = useState<UIItem[] | null>(null);
@@ -36,14 +40,16 @@ export default function CartPage() {
           productId
         })
       });
-  
-      setItems(currentItems =>
-        currentItems!.map(item =>
-          item.id === productId ? { ...item, quantity: newQuantity } : item
-        )
-      );
-      const resJson = await res.json();
+      const resJson : UpdateQuantityResponse = await res.json();
       console.log(resJson)
+
+      setItems(currentItems =>
+        resJson.quantityPersisted !== 0 ?
+          currentItems!.map(item =>
+            item.id === productId ? { ...item, quantity: resJson.quantityPersisted } : item
+          )
+        : currentItems!.filter(item => item.id !== productId )
+      );
     }
     catch(err){
       console.log(err)
@@ -87,7 +93,7 @@ export default function CartPage() {
             quantity: i.quantity,
           })) ?? [];
 
-          console.log(ui)
+          console.log("Logando a UI: " + ui)
 
         if (mounted) setItems(ui);
       } catch {

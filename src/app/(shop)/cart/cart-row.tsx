@@ -71,7 +71,7 @@ export function CartRow({
 
 
 function Quantity({ value, onChange, isLoading }: { value: number; onChange?: (n: number) => void; isLoading: boolean }) { // ALTERADO: Recebe a prop isLoading
-  const dec = () => onChange?.(Math.max(1, value - 1));
+  const dec = () => onChange?.(Math.max(0, value - 1));
   const inc = () => onChange?.(value + 1);
 
   return (

@@ -5,4 +5,5 @@ export interface CartItemGateway{
     listCartItemsByUserId(userId: string) : Promise<CartItem[]>
     get(cartId: string, productId: string) : Promise<CartItem>
     updateQuantity(newQuantity: number, cartId: string, productId: string) : Promise<number>
+    delete(cartId: string, productId: string) : Promise<boolean>;
 }

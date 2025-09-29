@@ -29,6 +29,7 @@ export class UpdateQuantityCartItemUsecase implements
         cartId
     }: UpdateQuantityCartItemInputDto) : Promise<UpdateQuantityCartItemOutputDto> {
         console.log("Quantidade no usecase: "+ newQuantity)
+
         if(newQuantity < 0){
             throw new Error("Quantity must be positive!");
         }
@@ -40,6 +41,14 @@ export class UpdateQuantityCartItemUsecase implements
 
         if(!cartItem)
             throw new Error("Cart item does not exists!");
+
+
+        if(newQuantity == 0){
+            console.log("Removing product from cart");
+            const isDeleted = await this.cartItemGateway.delete(cartId, productId);
+            if(isDeleted)
+                return 0;
+        }
 
         if(newQuantity > stockQuantity)
             throw new Error("Stock insufficient for this product!")
