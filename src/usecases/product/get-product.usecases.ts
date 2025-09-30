@@ -11,6 +11,7 @@ export type GetProductOutputDto = {
   id: string;
   name: string;
   price: number;
+  description: string;
   quantity: number;
   images: {
     id: string;
@@ -29,7 +30,7 @@ export class GetProductUsecase implements Usecase<GetProductInputDto, GetProduct
 
     public async execute({id} : GetProductInputDto) : Promise<GetProductOutputDto>{
         const product = await this.productGateway.get(id)
-
+        console.log("Usecase: " + product.description)
         return this.presentOutput(product)
     }
 

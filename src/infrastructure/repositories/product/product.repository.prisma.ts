@@ -75,6 +75,7 @@ export class ProductRepositoryPrisma implements ProductGateway{
                 name: product.name,
                 price: product.price.toNumber(),
                 quantity: product.quantity,
+                description: product.description ?? "",
                 images: product.images.map(img => 
                     ProductImage.with({
                         id: img.id,
