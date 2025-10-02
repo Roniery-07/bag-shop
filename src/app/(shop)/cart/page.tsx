@@ -19,6 +19,10 @@ type UpdateQuantityResponse = {
   quantityPersisted: number
 }
 
+type RemoveItemResponse = {
+  deleted: boolean
+}
+
 
 export default function CartPage() {
   const [items, setItems] = useState<UIItem[] | null>(null);
@@ -41,7 +45,9 @@ export default function CartPage() {
         })
       });
       const resJson : UpdateQuantityResponse = await res.json();
-      console.log(resJson)
+      if(!resJson){
+        throw new Error("Error on fetching to server")
+      }
 
       setItems(currentItems =>
         resJson.quantityPersisted !== 0 ?
@@ -49,6 +55,37 @@ export default function CartPage() {
             item.id === productId ? { ...item, quantity: resJson.quantityPersisted } : item
           )
         : currentItems!.filter(item => item.id !== productId )
+      );
+    }
+    catch(err){
+      console.log(err)
+    }
+    finally{
+      setLoadingItems((prev) => {
+        const next = new Set(prev)
+        next.delete(productId)
+        return next;
+      })
+    }
+  }
+
+  const handleRemove = async(productId: string) => {
+    if (loadingItems.has(productId)) return;
+    try{
+
+      setLoadingItems((prev) => new Set(prev).add(productId))
+      const res = await fetch("/api/cart/remove", {
+        method: "DELETE",
+        body: JSON.stringify({
+          productId
+        })
+      });
+      const resJson : RemoveItemResponse = await res.json();
+      if(!resJson.deleted){
+        return
+      }
+      setItems(currentItems =>
+        currentItems!.filter(item => item.id !== productId )
       );
     }
     catch(err){
@@ -159,6 +196,7 @@ export default function CartPage() {
                 {items!.map((item) => (
                   <CartRow key={item.id} item={item}
                     onUpdateQuantity={handleQuantityUpdate}
+                    onRemove={handleRemove}
                     isLoading={loadingItems.has(item.id)}/>
                 ))}
               </ul>
