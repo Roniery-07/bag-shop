@@ -25,11 +25,19 @@ export class CartItem{
     }
 
     public increaseQuantity(value : number){
-        if(!Number.isInteger(value)){
+        if(!Number.isInteger(value) || value < 0){
             throw new Error("Quantity must be a positive integer.")                
         }
 
-        this.props.quantity++;
+        this.props.quantity = this.props.quantity + value;
+    }
+
+    public decreaseQuantity(value: number){
+        if(!Number.isInteger(value) || value < 0 ){
+            throw new Error("Quantity must be a positive integer.")                
+        }
+
+        this.props.quantity = this.props.quantity - value;
     }
 
     public get cartId(){
@@ -40,5 +48,12 @@ export class CartItem{
     }
     public get quantity(){
         return this.props.quantity;
+    }
+
+    public set quantity(newQt: number){
+        if(!Number.isInteger(newQt) || newQt < 0 ){
+            throw new Error("Quantity must be a positive integer.")                
+        }
+        this.props.quantity = newQt
     }
 }
