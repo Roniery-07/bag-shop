@@ -28,7 +28,6 @@ export class UpdateQuantityCartItemUsecase implements
         productId,
         cartId
     }: UpdateQuantityCartItemInputDto) : Promise<UpdateQuantityCartItemOutputDto> {
-        console.log("Quantidade no usecase: "+ newQuantity)
 
         if(newQuantity < 0){
             throw new Error("Quantity must be positive!");
