@@ -26,14 +26,17 @@ const frameworks = [
 ]
 
 interface DropdownListProps{
-  className: string
+  className: string,
+  value: string,
+  setValue: (value: string) => void
 }
 
-export function DropdownList(
-  {className} : DropdownListProps
-) {
+export function DropdownList({
+  className,
+  value, 
+  setValue
+} : DropdownListProps) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
