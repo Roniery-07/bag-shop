@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import React from 'react';
+import React from 'react'
 import {
   SidebarProvider,
   SidebarTrigger,
   SidebarInset,
-} from '@/components/ui/sidebar';
-import { ManagerSidebar } from '@/components/manager-sidebar';
+} from '@/components/ui/sidebar'
+import { ManagerSidebar } from '@/components/manager-sidebar'
 
 export default function ManagerLayout({
   children,
@@ -21,5 +21,5 @@ export default function ManagerLayout({
         </header>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }
