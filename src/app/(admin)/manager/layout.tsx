@@ -1,22 +1,25 @@
-"use client"
+'use client';
 
-import React from 'react'
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
-import { ManagerSidebar } from "@/components/manager-sidebar"
+import React from 'react';
+import {
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarInset,
+} from '@/components/ui/sidebar';
+import { ManagerSidebar } from '@/components/manager-sidebar';
 
-export default function ManagerLayout( {children} : Readonly<{children : React.ReactNode}>) {
-
+export default function ManagerLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <SidebarProvider >
+    <SidebarProvider>
       <ManagerSidebar />
       <SidebarInset>
         <header>
           <SidebarTrigger />
-          {children}  
+          {children}
         </header>
       </SidebarInset>
-
     </SidebarProvider>
-  )
-    
+  );
 }
