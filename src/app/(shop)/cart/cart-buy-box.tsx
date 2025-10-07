@@ -7,7 +7,7 @@ interface CartBuyBoxProps {
   shippingCost: number
   setShippingCost: (x: number) => void
   setDiscount: (x: number) => void
-  setCoupon: (x: string) => void
+  setCouponCode: (x: string) => void
 }
 
 export const CartBuyBox = ({
