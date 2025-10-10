@@ -198,7 +198,7 @@ export default function CartPage() {
       {!hasItems ? (
         <EmptyState />
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
           <section className="col-span-2 ">
             <div className="space-y-4 p-1 border border-neutral-200/70 rounded-2xl shadow-sm ">
               <ul className="divide-y divide-neutral-200/70">

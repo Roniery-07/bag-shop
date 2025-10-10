@@ -22,7 +22,7 @@ export function CartRow({
 }) {
   return (
     <li
-      className={`flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:gap-6 transition-opacity ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}
+      className={`flex flex-col gap-4 p-4 flex-row items-center sm:gap-6 transition-opacity ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}
     >
       <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-neutral-100 sm:h-24 sm:w-24">
         <Image
