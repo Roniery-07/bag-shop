@@ -1,13 +1,9 @@
-import { ChevronLeft, Heart, ShoppingCart } from 'lucide-react';
+import { ChevronLeft, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
-import { DropdownList } from '@/components/dropdown-list';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { ProductRepositoryPrisma } from '@/infrastructure/repositories/product/product.repository.prisma';
-// import { ProductSection } from '@/components/product-section-slick';
 import { prisma } from '@/lib/db/prisma';
 import { GetProductUsecase } from '@/usecases/product/get-product.usecases';
 
