@@ -1,88 +1,88 @@
-'use client'
+'use client';
 
 import {
   createContext,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
-  ReactNode,
-} from 'react'
+} from 'react';
 
 type User = {
-  id: string
-  name: string
-  email: string
-  role?: 'user' | 'admin'
-  avatarUrl?: string
-}
+  id: string;
+  name: string;
+  email: string;
+  role?: 'user' | 'admin';
+  avatarUrl?: string;
+};
 
 type AuthContextData = {
-  user: User | null
-  isAuthenticated: boolean
-  isLoading: boolean
-  setUser: React.Dispatch<React.SetStateAction<User | null>>
-  refresh: () => Promise<void>
-  signOut: () => Promise<void>
-}
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  refresh: () => Promise<void>;
+  signOut: () => Promise<void>;
+};
 
-const AuthContext = createContext<AuthContextData | undefined>(undefined)
+const AuthContext = createContext<AuthContextData | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const res = await fetch('/api/session', { credentials: 'include' })
+      const res = await fetch('/api/session', { credentials: 'include' });
       if (res.ok) {
-        const data = (await res.json()) as User | null 
-        setUser(data ?? null)
+        const data = (await res.json()) as User | null;
+        setUser(data ?? null);
       } else {
-        setUser(null)
+        setUser(null);
       }
     } catch {
-      setUser(null)
+      setUser(null);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [])
+  }, []);
 
   const signOut = useCallback(async () => {
     try {
-      await fetch('/api/logout', { method: 'POST', credentials: 'include' })
+      await fetch('/api/logout', { method: 'POST', credentials: 'include' });
     } finally {
-      setUser(null)
+      setUser(null);
       // sincroniza entre abas
       try {
-        localStorage.setItem('auth:changed', String(Date.now()))
+        localStorage.setItem('auth:changed', String(Date.now()));
       } catch {}
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     // primeira carga
-    refresh()
+    refresh();
 
     // revalidar ao focar a aba
-    const onFocus = () => refresh()
-    window.addEventListener('focus', onFocus)
+    const onFocus = () => refresh();
+    window.addEventListener('focus', onFocus);
 
     // sincronizar entre abas
     const onStorage = (e: StorageEvent) => {
-      if (e.key === 'auth:changed') refresh()
-    }
-    window.addEventListener('storage', onStorage)
+      if (e.key === 'auth:changed') refresh();
+    };
+    window.addEventListener('storage', onStorage);
 
     return () => {
-      window.removeEventListener('focus', onFocus)
-      window.removeEventListener('storage', onStorage)
-    }
-  }, [refresh])
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, [refresh]);
 
-  const isAuthenticated = useMemo(() => !!user, [user])
+  const isAuthenticated = useMemo(() => !!user, [user]);
 
   const value: AuthContextData = {
     user,
@@ -91,13 +91,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser,
     refresh,
     signOut,
-  }
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth deve ser usado dentro de <AuthProvider>')
-  return ctx
-}
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth deve ser usado dentro de <AuthProvider>');
+  return ctx;
+};

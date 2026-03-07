@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { X } from "lucide-react";
+import Link from 'next/link';
+import { X } from 'lucide-react';
 
 export function EmptyState() {
   return (
@@ -8,7 +8,9 @@ export function EmptyState() {
         <X className="h-6 w-6" />
       </div>
       <h3 className="text-lg font-medium">Seu carrinho está vazio</h3>
-      <p className="mt-1 text-sm text-neutral-500">Explore nossos produtos e adicione seus favoritos ✨</p>
+      <p className="mt-1 text-sm text-neutral-500">
+        Explore nossos produtos e adicione seus favoritos ✨
+      </p>
       <Link
         href="/"
         className="mt-6 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90"

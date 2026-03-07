@@ -1,4 +1,4 @@
-import  {Home, Settings } from "lucide-react"
+import { Home, Settings } from 'lucide-react';
 
 import {
   Sidebar,
@@ -9,21 +9,21 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
+    title: 'Home',
+    url: '#',
     icon: Home,
   },
   {
-    title: "Settings",
-    url: "#",
+    title: 'Settings',
+    url: '#',
     icon: Settings,
   },
-]
+];
 
 export function ManagerSidebar() {
   return (
@@ -48,5 +48,5 @@ export function ManagerSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

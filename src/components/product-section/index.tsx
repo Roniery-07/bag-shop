@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import ProductCard from "@/components/product-card";
-import { ListProductOutputDto } from "@/usecases/product/list-product.usecases";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
+import ProductCard from '@/components/product-card';
+import { ListProductOutputDto } from '@/usecases/product/list-product.usecases';
 
 interface Props {
   products: ListProductOutputDto;
-  itemsPerPage?: number;   // quantos cards aparecem de cada vez
-  gap?: string;            // espaçamento entre cards (classe tailwind)
+  itemsPerPage?: number; // quantos cards aparecem de cada vez
+  gap?: string; // espaçamento entre cards (classe tailwind)
 }
 
 export function ProductSection({
   products,
   itemsPerPage = 4,
-  gap = "gap-4",
+  gap = 'gap-4',
 }: Props) {
   // total de páginas
   const pageCount = Math.ceil(products.length / itemsPerPage);
@@ -30,11 +30,8 @@ export function ProductSection({
   // fatia visível
   const visible = useMemo(
     () =>
-      products.slice(
-        page * itemsPerPage,
-        page * itemsPerPage + itemsPerPage
-      ),
-    [products, page, itemsPerPage]
+      products.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage),
+    [products, page, itemsPerPage],
   );
 
   return (
@@ -61,19 +58,14 @@ export function ProductSection({
       </button>
 
       {/* faixa de cards */}
-      <div
-        className={`overflow-hidden`} /* espaço p/ setas */
-      >
+      <div className={`overflow-hidden`} /* espaço p/ setas */>
         <ul
           // animação: desloca toda a faixa de acordo com a página
           className={`flex transition-transform duration-1000 ${gap}`}
           style={{ transform: `translateX(-${page * 100}%)` }}
         >
           {products.map((p) => (
-            <li
-              key={p.id}
-              className={`min-w-[calc(100%/${itemsPerPage})]`}
-            >
+            <li key={p.id} className={`min-w-[calc(100%/${itemsPerPage})]`}>
               <ProductCard product={p} />
             </li>
           ))}

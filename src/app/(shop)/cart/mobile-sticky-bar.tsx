@@ -1,6 +1,12 @@
-import {BRL} from "@/lib/utils/BRL"
+import { BRL } from '@/lib/utils/BRL';
 
-export function MobileStickyBar({ total, onCheckout }: { total: number; onCheckout?: () => void }) {
+export function MobileStickyBar({
+  total,
+  onCheckout,
+}: {
+  total: number;
+  onCheckout?: () => void;
+}) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-neutral-800 dark:bg-neutral-900/80">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">

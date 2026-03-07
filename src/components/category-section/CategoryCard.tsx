@@ -8,7 +8,7 @@ interface Category {
   name: string;
   image: string;
   description?: string;
-  cta?: string;          // texto do botão/cta
+  cta?: string; // texto do botão/cta
 }
 
 interface Props {

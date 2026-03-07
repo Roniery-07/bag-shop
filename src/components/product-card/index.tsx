@@ -1,15 +1,18 @@
 // components/product-card.tsx
 'use client';
 
-import Link from 'next/link';
+import { Heart, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
-import { ShoppingCart, Heart } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+
+import { useAuth } from '@/lib/context/authContext';
 
 type ProductImage = { url: string; order?: number };
 export interface Product {
   id: string;
   name: string;
-  price: number;        // em centavos? ajuste conforme
+  price: number; // em centavos? ajuste conforme
   oldPrice?: number;
   images: ProductImage[];
 }
@@ -19,36 +22,41 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { user } = useAuth();
 
   const handleAddToCartClick = async (productId: string, quantity: number) => {
-    const res = await fetch("api/cart/add-product/", {
-      method: "POST",
-      headers: {"ContentType": "application/json"},
-      body: JSON.stringify({productId, quantity})
-    })
+    if (!user) {
+      router.push(`auth/login?callbackUrl=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    const res = await fetch('api/cart/add-product/', {
+      method: 'POST',
+      headers: { ContentType: 'application/json' },
+      body: JSON.stringify({ productId, quantity }),
+    });
 
     if (res.status === 401) {
-      throw new Error("Você precisa estar logado.");
+      throw new Error('Você precisa estar logado.');
     }
 
     if (!res.ok) {
       const err = await res.json().catch(() => null);
-      throw new Error(err?.error ?? "Falha ao adicionar ao carrinho.");
+      throw new Error(err?.error ?? 'Falha ao adicionar ao carrinho.');
     }
-  }
-
+  };
 
   const cover =
     product.images.find((i) => i.order === 1)?.url || product.images[0]?.url;
   const format = (value: number) =>
-    (value ).toLocaleString('pt-BR', {
+    value.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
     });
 
   return (
     <article className="group relative w-full max-w-[220px] overflow-hidden rounded-2xl bg-white shadow transition hover:shadow-lg">
-
       {/* IMAGEM */}
       <Link href={`/products/${product.id}`} className="block">
         <div className="relative aspect-square w-full bg-pink-100">

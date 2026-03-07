@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getSessionCookie } from "better-auth/cookies";
+import { getSessionCookie } from 'better-auth/cookies';
+import { NextRequest, NextResponse } from 'next/server';
 
-const protectedRoutes = ["/profile", "/manager", "/cart"];
+const protectedRoutes = ['/profile', '/manager', '/cart'];
 
 export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
@@ -13,7 +13,7 @@ export async function middleware(req: NextRequest) {
   const isOnProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
 
   if (isOnProtectedRoute && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+    return NextResponse.redirect(new URL('/auth/login', req.url));
   }
 
   return res;
@@ -21,6 +21,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/api/cart/:path',
   ],
 };

@@ -5,11 +5,11 @@ import { GetProductUsecase } from '@/usecases/product/get-product.usecases';
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const {id} = await params;
-    const productRepo       = ProductRepositoryPrisma.create(prisma);
+    const { id } = await params;
+    const productRepo = ProductRepositoryPrisma.create(prisma);
     const getProductUsecase = GetProductUsecase.create(productRepo);
 
     const dto = await getProductUsecase.execute({ id });
@@ -17,9 +17,6 @@ export async function GET(
     return NextResponse.json(dto, { status: 200 });
   } catch (e) {
     console.error(e);
-    return NextResponse.json(
-      { message: 'Product not found' },
-      { status: 404 }
-    );
+    return NextResponse.json({ message: 'Product not found' }, { status: 404 });
   }
 }

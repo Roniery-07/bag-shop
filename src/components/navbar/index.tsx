@@ -1,24 +1,18 @@
 // components/layout/Navbar.tsx
 'use client';
 
-import { useState } from 'react';
+import { LogIn, LogOut, Menu, Search, ShoppingBag, X } from 'lucide-react';
 import Link from 'next/link';
-import {
-  Menu,
-  X,
-  Search,
-  ShoppingBag,
-  LogIn,
-  LogOut,
-} from 'lucide-react';
-import { useAuth } from '@/lib/context/authContext';
-import { signOutAction } from '@/actions/sign-out-email.actions';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import { signOutAction } from '@/actions/sign-out-email.actions';
+import { useAuth } from '@/lib/context/authContext';
 
 export default function Navbar() {
   const { isAuthenticated, setUser } = useAuth();
   const [open, setOpen] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   /* Links principais – edite se precisar */
   const links = [
     { href: '/', label: 'Início' },
@@ -30,8 +24,8 @@ export default function Navbar() {
   async function handleLogout() {
     const { error } = await signOutAction();
     if (!error) {
-      setUser(null);        // atualiza contexto
-      router.push("/auth/login");   // redireciona
+      setUser(null); // atualiza contexto
+      router.push('/auth/login'); // redireciona
     }
   }
 
@@ -48,10 +42,7 @@ export default function Navbar() {
         <ul className="hidden items-center gap-8 font-medium text-pink-800 md:flex">
           {links.map(({ href, label }) => (
             <li key={href}>
-              <Link
-                href={href}
-                className="transition hover:text-pink-500"
-              >
+              <Link href={href} className="transition hover:text-pink-500">
                 {label}
               </Link>
             </li>

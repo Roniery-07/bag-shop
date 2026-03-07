@@ -1,7 +1,7 @@
-import { User } from "../entity/user";
+import { User } from '../entity/user';
 
 export interface UserGateway {
-    save(user: User) : Promise<void>
-    list() : Promise<User[]>
-    get(entityId : string) : Promise<User>
+  save(user: User): Promise<void>;
+  list(): Promise<User[]>;
+  get(entityId: string): Promise<User>;
 }
