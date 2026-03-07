@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { Heart, Minus, Plus, Trash2 } from 'lucide-react'
-import Image from 'next/image'
+import { Heart, Minus, Plus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 
-import { BRL } from '@/lib/utils/BRL'
+import { BRL } from '@/lib/utils/BRL';
 
-import { UIItem } from './page'
+import { UIItem } from './page';
 
 export function CartRow({
   item,
@@ -14,11 +14,11 @@ export function CartRow({
   onMoveToWishlist,
   isLoading,
 }: {
-  item: UIItem
-  onUpdateQuantity?: (id: string, qty: number) => void
-  onRemove?: (id: string) => void
-  onMoveToWishlist?: (id: string) => void
-  isLoading: boolean
+  item: UIItem;
+  onUpdateQuantity?: (id: string, qty: number) => void;
+  onRemove?: (id: string) => void;
+  onMoveToWishlist?: (id: string) => void;
+  isLoading: boolean;
 }) {
   return (
     <li
@@ -79,7 +79,7 @@ export function CartRow({
         </div>
       </div>
     </li>
-  )
+  );
 }
 
 function Quantity({
@@ -87,13 +87,13 @@ function Quantity({
   onChange,
   isLoading,
 }: {
-  value: number
-  onChange?: (n: number) => void
-  isLoading: boolean
+  value: number;
+  onChange?: (n: number) => void;
+  isLoading: boolean;
 }) {
   // ALTERADO: Recebe a prop isLoading
-  const dec = () => onChange?.(Math.max(0, value - 1))
-  const inc = () => onChange?.(value + 1)
+  const dec = () => onChange?.(Math.max(0, value - 1));
+  const inc = () => onChange?.(value + 1);
 
   return (
     <div className="inline-flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-2 py-1 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
@@ -119,5 +119,5 @@ function Quantity({
         <Plus className="h-4 w-4" />
       </button>
     </div>
-  )
+  );
 }

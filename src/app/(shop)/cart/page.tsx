@@ -1,62 +1,62 @@
-'use client'
+'use client';
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react';
 
-import { ListCartItemByUserIdOutputDto } from '@/usecases/cart-item/list-cart-item-by-user-id.usecase'
+import { ListCartItemByUserIdOutputDto } from '@/usecases/cart-item/list-cart-item-by-user-id.usecase';
 
-import { CartBuyBox } from './cart-buy-box'
-import { CartRow } from './cart-row'
-import { EmptyState } from './empty-state'
-import { MobileStickyBar } from './mobile-sticky-bar'
+import { CartBuyBox } from './cart-buy-box';
+import { CartRow } from './cart-row';
+import { EmptyState } from './empty-state';
+import { MobileStickyBar } from './mobile-sticky-bar';
 
 export type UIItem = {
-  id: string // productId
-  name: string
-  image: string // primeira imagem (ou placeholder)
-  price: number // preço unitário
-  quantity: number // quantidade no carrinho
-  variant?: string // se quiser adicionar depois (cor/tamanho)
-}
+  id: string; // productId
+  name: string;
+  image: string; // primeira imagem (ou placeholder)
+  price: number; // preço unitário
+  quantity: number; // quantidade no carrinho
+  variant?: string; // se quiser adicionar depois (cor/tamanho)
+};
 
 type UpdateQuantityResponse = {
-  quantityPersisted: number
-}
+  quantityPersisted: number;
+};
 
 type RemoveItemResponse = {
-  deleted: boolean
-}
+  deleted: boolean;
+};
 
 export const brl = (v: number) =>
   new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  }).format(v)
+  }).format(v);
 
 export default function CartPage() {
-  const [items, setItems] = useState<UIItem[] | null>(null)
-  const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set())
-  const [error, setError] = useState<string | null>(null)
-  const [shippingCost, setShippingCost] = useState<number>(0)
-  const [discount, setDiscount] = useState<number>(0)
-  const [couponCode, setCouponCode] = useState<string>('')
+  const [items, setItems] = useState<UIItem[] | null>(null);
+  const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set());
+  const [error, setError] = useState<string | null>(null);
+  const [shippingCost, setShippingCost] = useState<number>(0);
+  const [discount, setDiscount] = useState<number>(0);
+  const [couponCode, setCouponCode] = useState<string>('');
 
   const handleQuantityUpdate = async (
     productId: string,
     newQuantity: number,
   ) => {
-    if (loadingItems.has(productId)) return
+    if (loadingItems.has(productId)) return;
     try {
-      setLoadingItems((prev) => new Set(prev).add(productId))
+      setLoadingItems((prev) => new Set(prev).add(productId));
       const res = await fetch('/api/cart/update-quantity', {
         method: 'POST',
         body: JSON.stringify({
           newQuantity,
           productId,
         }),
-      })
-      const resJson: UpdateQuantityResponse = await res.json()
+      });
+      const resJson: UpdateQuantityResponse = await res.json();
       if (!resJson) {
-        throw new Error('Error on fetching to server')
+        throw new Error('Error on fetching to server');
       }
 
       setItems((currentItems) =>
@@ -67,67 +67,67 @@ export default function CartPage() {
                 : item,
             )
           : currentItems!.filter((item) => item.id !== productId),
-      )
+      );
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
       setLoadingItems((prev) => {
-        const next = new Set(prev)
-        next.delete(productId)
-        return next
-      })
+        const next = new Set(prev);
+        next.delete(productId);
+        return next;
+      });
     }
-  }
+  };
 
   const handleRemove = async (productId: string) => {
-    if (loadingItems.has(productId)) return
+    if (loadingItems.has(productId)) return;
     try {
-      setLoadingItems((prev) => new Set(prev).add(productId))
+      setLoadingItems((prev) => new Set(prev).add(productId));
       const res = await fetch('/api/cart/remove', {
         method: 'DELETE',
         body: JSON.stringify({
           productId,
         }),
-      })
-      const resJson: RemoveItemResponse = await res.json()
+      });
+      const resJson: RemoveItemResponse = await res.json();
       if (!resJson.deleted) {
-        return
+        return;
       }
       setItems((currentItems) =>
         currentItems!.filter((item) => item.id !== productId),
-      )
+      );
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
       setLoadingItems((prev) => {
-        const next = new Set(prev)
-        next.delete(productId)
-        return next
-      })
+        const next = new Set(prev);
+        next.delete(productId);
+        return next;
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
 
-    ;(async () => {
+    (async () => {
       try {
-        const res = await fetch('/api/cart/list', { cache: 'no-store' })
+        const res = await fetch('/api/cart/list', { cache: 'no-store' });
 
         if (res.status === 401) {
           // usuário não logado
-          if (mounted) setItems([])
-          return
+          if (mounted) setItems([]);
+          return;
         }
 
         if (!res.ok) {
-          const err = await res.json().catch(() => ({}))
-          throw new Error(err?.error ?? 'Falha ao carregar o carrinho.')
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err?.error ?? 'Falha ao carregar o carrinho.');
         }
 
-        const data = await res.json()
+        const data = await res.json();
 
-        console.log(data)
+        console.log(data);
         const ui: UIItem[] =
           (data.entities as ListCartItemByUserIdOutputDto)?.map((i) => ({
             id: i.product.id,
@@ -135,25 +135,25 @@ export default function CartPage() {
             image: i.product.image.url ?? '/placeholder.png',
             price: i.product.price,
             quantity: i.quantity,
-          })) ?? []
+          })) ?? [];
 
-        console.log('Logando a UI: ' + ui)
+        console.log('Logando a UI: ' + ui);
 
-        if (mounted) setItems(ui)
+        if (mounted) setItems(ui);
       } catch {
-        if (mounted) setError('Erro inesperado')
+        if (mounted) setError('Erro inesperado');
       }
-    })()
+    })();
 
     return () => {
-      mounted = false
-    }
-  }, [])
+      mounted = false;
+    };
+  }, []);
 
   const subtotal = useMemo(
     () => (items ?? []).reduce((acc, it) => acc + it.price * it.quantity, 0),
     [items],
-  )
+  );
 
   // Loading
   if (items === null && !error) {
@@ -171,7 +171,7 @@ export default function CartPage() {
           <div className="h-48 rounded-2xl bg-neutral-200 animate-pulse" />
         </div>
       </div>
-    )
+    );
   }
 
   // Erro
@@ -181,10 +181,10 @@ export default function CartPage() {
         <h1 className="text-2xl font-semibold">Seu carrinho</h1>
         <p className="text-sm text-red-600 mt-2">{error}</p>
       </div>
-    )
+    );
   }
 
-  const hasItems = (items?.length ?? 0) > 0
+  const hasItems = (items?.length ?? 0) > 0;
 
   return (
     <div className="mx-auto max-w-6xl w-full px-4 py-6">
@@ -231,7 +231,7 @@ export default function CartPage() {
         <MobileStickyBar total={subtotal} onCheckout={() => {}} />
       )}
     </div>
-  )
+  );
 }
 
 // implementar parte de descontos, cupons e frete.

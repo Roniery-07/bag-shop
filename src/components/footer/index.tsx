@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, Instagram, Facebook, Heart} from 'lucide-react';
+import { Mail, Instagram, Facebook, Heart } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -14,9 +14,7 @@ export default function Footer() {
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {/* Newsletter */}
         <div className="col-span-full lg:col-span-1">
-          <h2 className="mb-3 text-lg font-semibold">
-            Fique por dentro ✨
-          </h2>
+          <h2 className="mb-3 text-lg font-semibold">Fique por dentro ✨</h2>
           <p className="mb-4 text-sm">
             Receba novidades, promoções e conteúdos fofos direto no seu e-mail.
           </p>
@@ -57,7 +55,9 @@ export default function Footer() {
         {/* Suporte */}
         <FooterColumn title="Suporte">
           <FooterLink href="/faq">FAQ</FooterLink>
-          <FooterLink href="/trocas-e-devolucoes">Trocas &amp; devoluções</FooterLink>
+          <FooterLink href="/trocas-e-devolucoes">
+            Trocas &amp; devoluções
+          </FooterLink>
           <FooterLink href="/contato">Fale conosco</FooterLink>
           <FooterLink href="/privacidade">Política de privacidade</FooterLink>
         </FooterColumn>
@@ -76,7 +76,6 @@ export default function Footer() {
           <SocialIcon href="https://facebook.com">
             <Facebook />
           </SocialIcon>
-
         </ul>
 
         {/* Payment methods (exemplo genérico) */}
@@ -114,7 +113,8 @@ export default function Footer() {
         {/* Copyright */}
         <p className="text-xs text-pink-700">
           © {new Date().getFullYear()} Cute Store — feito com&nbsp;
-          <Heart className="inline h-3 w-3 fill-pink-500 stroke-pink-500" /> em Minas Gerais
+          <Heart className="inline h-3 w-3 fill-pink-500 stroke-pink-500" /> em
+          Minas Gerais
         </p>
       </div>
     </footer>
@@ -133,12 +133,20 @@ function FooterColumn({
   return (
     <div className="flex flex-col gap-2">
       <h3 className="mb-2 font-semibold">{title}</h3>
-      <nav className="flex flex-col gap-1 text-sm text-pink-700">{children}</nav>
+      <nav className="flex flex-col gap-1 text-sm text-pink-700">
+        {children}
+      </nav>
     </div>
   );
 }
 
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}

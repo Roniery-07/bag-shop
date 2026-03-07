@@ -1,17 +1,16 @@
-// app/(store)/products/[id]/page.tsx
+import { ChevronLeft, Heart, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ChevronLeft, Heart, ShoppingCart } from 'lucide-react';
 
+import { DropdownList } from '@/components/dropdown-list';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DropdownList } from '@/components/dropdown-list';
-// import { ProductSection } from '@/components/product-section-slick';
-
-import { prisma } from '@/lib/db/prisma';
 import { ProductRepositoryPrisma } from '@/infrastructure/repositories/product/product.repository.prisma';
+// import { ProductSection } from '@/components/product-section-slick';
+import { prisma } from '@/lib/db/prisma';
 import { GetProductUsecase } from '@/usecases/product/get-product.usecases';
+
 import { ProductBuyBox } from './product-buy-box';
 
 interface PageProps {
@@ -19,20 +18,19 @@ interface PageProps {
 }
 
 export const money = (value: number) =>
-  (value).toLocaleString('pt-BR', {
+  value.toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL',
   });
 
-
 export default async function ProductPage({ params }: PageProps) {
-  const p = await params
+  const p = await params;
   const productRepo = ProductRepositoryPrisma.create(prisma);
   const getProduct = GetProductUsecase.create(productRepo);
   const product = await getProduct.execute({ id: p.id });
-  
+
   if (!product) notFound();
-  console.log("Description: " + product.description)
+  console.log('Description: ' + product.description);
 
   const cover =
     product.images.find((i) => i.order === 1)?.url ?? product.images[0].url;
@@ -55,7 +53,7 @@ export default async function ProductPage({ params }: PageProps) {
               src={cover}
               alt={product.name}
               fill
-              sizes='720px 720px'
+              sizes="720px 720px"
               priority
               className="object-cover"
             />
@@ -105,10 +103,12 @@ export default async function ProductPage({ params }: PageProps) {
             <li>Até 6x sem juros</li>
             <li>Primeira troca grátis</li>
           </ul>
-
         </section>
 
-          <ProductBuyBox productId={product.id} formattedPrice={money(product.price)}/>
+        <ProductBuyBox
+          productId={product.id}
+          formattedPrice={money(product.price)}
+        />
       </div>
 
       {/* ------ Produtos relacionados (opcional) ------

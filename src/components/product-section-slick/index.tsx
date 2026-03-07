@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState, useRef } from "react";
-import Slider from "react-slick";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import ProductCard from "@/components/product-card";
-import { ListProductOutputDto } from "@/usecases/product/list-product.usecases";
+import React, { useState, useRef } from 'react';
+import Slider from 'react-slick';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ProductCard from '@/components/product-card';
+import { ListProductOutputDto } from '@/usecases/product/list-product.usecases';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface Props {
   products: ListProductOutputDto;
@@ -15,10 +15,10 @@ interface Props {
   gap?: string; // ex.: "px-4" ou "pr-2"
 }
 
-export  function ProductSection({
+export function ProductSection({
   products,
   itemsPerPage = 4,
-  gap = "px-4",
+  gap = 'px-4',
 }: Props) {
   /* ---------- estado / refs ---------- */
   const sliderRef = useRef<Slider | null>(null);

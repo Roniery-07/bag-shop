@@ -1,13 +1,13 @@
-import { brl, UIItem } from './page'
+import { brl, UIItem } from './page';
 interface CartBuyBoxProps {
-  items: UIItem[] | null
-  subtotal: number
-  discount: number
-  couponCode: string
-  shippingCost: number
-  setShippingCost: (x: number) => void
-  setDiscount: (x: number) => void
-  setCouponCode: (x: string) => void
+  items: UIItem[] | null;
+  subtotal: number;
+  discount: number;
+  couponCode: string;
+  shippingCost: number;
+  setShippingCost: (x: number) => void;
+  setDiscount: (x: number) => void;
+  setCouponCode: (x: string) => void;
 }
 
 export const CartBuyBox = ({
@@ -112,5 +112,5 @@ export const CartBuyBox = ({
         </div>
       </div>
     </aside>
-  )
-}
+  );
+};
