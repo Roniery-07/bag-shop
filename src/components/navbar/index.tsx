@@ -16,9 +16,10 @@ export default function Navbar() {
   /* Links principais – edite se precisar */
   const links = [
     { href: '/', label: 'Início' },
-    { href: '/collections', label: 'Coleções' },
-    { href: '/categories', label: 'Categorias' },
-    { href: '/contact', label: 'Contato' },
+    //    { href: '/collections', label: 'Coleções' },
+    //    { href: '/categories', label: 'Categorias' },
+    //    { href: '/contact', label: 'Contato' },
+    { href: '/products', label: 'Produtos' },
   ];
 
   async function handleLogout() {
