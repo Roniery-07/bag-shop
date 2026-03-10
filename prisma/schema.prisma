@@ -1,7 +1,8 @@
 // the output param means that the class representing each table is going to be found on that path
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+  output          = "../src/generated/prisma"
 }
 
 datasource db {
@@ -35,7 +36,7 @@ model ProductImages {
 }
 
 model User {
-  id        String   @id 
+  id        String   @id
   createdAt DateTime
   updatedAt DateTime
 
@@ -83,7 +84,7 @@ model Account {
   password              String?
 
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("accounts")
 }
@@ -101,10 +102,10 @@ model Verification {
 }
 
 model Cart {
-  id       String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   CartItem CartItem[]
-  user     User        @relation(fields: [userId], references: [id])
-  userId   String      @unique @db.Uuid
+  user     User       @relation(fields: [userId], references: [id])
+  userId   String     @unique
 
   @@map("carts")
 }
