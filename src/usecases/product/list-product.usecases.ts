@@ -2,7 +2,9 @@ import { ProductGateway } from '@/domain/model/product/gateway/product.gateway';
 import { Usecase } from '../usecases';
 import { Product } from '@/domain/model/product/entity/product';
 
-export type ListProductInputDto = void;
+export type ListProductInputDto = {
+  search?: string;
+};
 
 export type ListProductOutputDto = {
   id: string;
@@ -18,16 +20,17 @@ export type ListProductOutputDto = {
 }[];
 
 export class ListProductUsecase
-  implements Usecase<ListProductInputDto, ListProductOutputDto>
-{
-  private constructor(private productGateway: ProductGateway) {}
+  implements Usecase<ListProductInputDto, ListProductOutputDto> {
+  private constructor(private productGateway: ProductGateway) { }
 
   public static create(productGateway: ProductGateway) {
     return new ListProductUsecase(productGateway);
   }
 
-  public async execute(): Promise<ListProductOutputDto> {
-    const products = await this.productGateway.list();
+  public async execute(
+    props: ListProductInputDto = {},
+  ): Promise<ListProductOutputDto> {
+    const products = await this.productGateway.list(props.search);
 
     return this.presentOutput(products);
   }
