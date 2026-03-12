@@ -3,31 +3,30 @@
 import { useEffect, useState } from 'react';
 import ProductCard from '@/components/product-card';
 import { Input } from '@/components/ui/input';
-import { ChangeEvent } from 'react';
 import { ListProductOutputDto } from '@/usecases/product/list-product.usecases';
 import { Search } from 'lucide-react';
+import { useDebounce } from '@/hooks/use-debounce';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<ListProductOutputDto>([]);
   const [searchInput, setSearchInput] = useState('');
+  const debouncedValue = useDebounce(500, searchInput);
+
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch('/api/products');
+      const url = debouncedValue
+        ? `/api/products?search=${encodeURIComponent(debouncedValue)}`
+        : '/api/products';
+      const res = await fetch(url);
       const data = await res.json();
       setProducts(data);
     };
 
     fetchProducts();
-  }, []);
+  }, [debouncedValue]);
 
-  const searchProduct = async (e: ChangeEvent<HTMLInputElement>) => {
-    const res = await fetch(
-      `/api/products${searchInput ? `?search=${e.target.value}` : ''}`,
-    );
-    const data = await res.json();
-    setSearchInput(e.target.value);
-    setProducts(data);
-    console.log(`products: ${data?.map((p) => p.name)}`);
+  const handleSearchInput = (value: string) => {
+    setSearchInput(value);
   };
 
   if (!products) {
@@ -44,7 +43,7 @@ export default function ProductsPage() {
             id="product-input"
             placeholder="Bolsa Meraki"
             className="w-2xl border-none focus-visible:ring-0 bg-none shadow-none bg-transparent"
-            onChange={searchProduct}
+            onChange={(e) => handleSearchInput(e.target.value)}
           />
         </div>
       </div>
