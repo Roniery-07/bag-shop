@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export default function Footer() {
   return (
-    <footer className="mt-20 bg-pink-50 text-pink-900">
+    <footer className="mt-20 bg-pink-50 text-pink-900 w-full">
       {/* Top section – newsletter + menus */}
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {/* Newsletter */}

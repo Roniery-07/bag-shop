@@ -158,7 +158,7 @@ export default function CartPage() {
   // Loading
   if (items === null && !error) {
     return (
-      <div className="mx-auto max-w-6xl w-full px-4 py-6">
+      <div className="mx-auto max-w-7xl w-full px-4 py-6 min-h-screen relative">
         <header className="mb-4">
           <h1 className="text-2xl font-semibold">Seu carrinho</h1>
           <p className="text-sm text-neutral-500">Carregando...</p>
@@ -177,7 +177,7 @@ export default function CartPage() {
   // Erro
   if (error) {
     return (
-      <div className="mx-auto max-w-6xl w-full px-4 py-6">
+      <div className="mx-auto max-w-7xl w-full px-4 py-6">
         <h1 className="text-2xl font-semibold">Seu carrinho</h1>
         <p className="text-sm text-red-600 mt-2">{error}</p>
       </div>
@@ -187,7 +187,7 @@ export default function CartPage() {
   const hasItems = (items?.length ?? 0) > 0;
 
   return (
-    <div className="mx-auto max-w-6xl w-full px-4 py-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 min-h-screen relative">
       <header className="mb-4">
         <h1 className="text-2xl font-semibold">Seu carrinho</h1>
         <p className="text-sm text-neutral-500">
@@ -196,7 +196,9 @@ export default function CartPage() {
       </header>
 
       {!hasItems ? (
-        <EmptyState />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-8/12 px-6 flex justify-center w-full">
+          <EmptyState />
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
           <section className="col-span-2 ">

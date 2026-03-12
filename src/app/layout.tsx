@@ -21,8 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>
-        <AuthProvider>{children}</AuthProvider>
+      <body
+        className={`flex flex-col min-h-screen {poppins.variable} antialiased`}
+      >
+        <main className="flex-grow">
+          <AuthProvider>{children}</AuthProvider>
+        </main>
       </body>
     </html>
   );
