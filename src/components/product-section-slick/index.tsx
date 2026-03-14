@@ -20,69 +20,50 @@ export function ProductSection({
   itemsPerPage = 4,
   gap = 'px-4',
 }: Props) {
-  /* ---------- estado / refs ---------- */
   const sliderRef = useRef<Slider | null>(null);
   const [slideIndex, setSlideIndex] = useState(0);
   const [updateCount, setUpdateCount] = useState(0);
 
-  /* ---------- configurações slick ---------- */
   const settings = {
-    dots: false,
+    dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: itemsPerPage,
-    slidesToScroll: itemsPerPage, // “vai” um bloco inteiro
-    draggable: false,
-    afterChange: () => setUpdateCount((c) => c + 1),
-    beforeChange: (_current: number, next: number) => setSlideIndex(next),
-  };
-
-  /* ---------- helpers ---------- */
-  const pageCount = Math.ceil(products.length / itemsPerPage);
-
-  const goTo = (idx: number) => sliderRef.current?.slickGoTo(idx);
-
-  const prev = () => {
-    if (slideIndex > 0) goTo(slideIndex - itemsPerPage);
-  };
-
-  const next = () => {
-    if (slideIndex < (pageCount - 1) * itemsPerPage)
-      goTo(slideIndex + itemsPerPage);
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
-    <div className="relative w-5xl">
-      {/* contador (exemplo do original) */}
-      <p className="sr-only">Total updates: {updateCount}</p>
-
-      {/* setas */}
-      <button
-        aria-label="Página anterior"
-        onClick={prev}
-        disabled={slideIndex === 0}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow
-                   disabled:opacity-30 disabled:pointer-events-none"
-      >
-        <ChevronLeft />
-      </button>
-
-      <button
-        aria-label="Próxima página"
-        onClick={next}
-        disabled={slideIndex >= (pageCount - 1) * itemsPerPage}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow
-                   disabled:opacity-30 disabled:pointer-events-none"
-      >
-        <ChevronRight />
-      </button>
-
-      {/* slider */}
-      <Slider ref={sliderRef} {...settings} className="overflow-hidden">
+    <div className="flex flex-col relative max-w-5xl w-full">
+      <Slider ref={sliderRef} {...settings}>
         {products.map((p) => (
-          <div key={p.id} className={gap}>
-            <ProductCard product={p} />
-          </div>
+          <ProductCard product={p} key={p.id} />
         ))}
       </Slider>
     </div>
