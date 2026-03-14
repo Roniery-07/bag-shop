@@ -56,7 +56,7 @@ export default function ProductCard({ product }: Props) {
     });
 
   return (
-    <article className="group mx-auto relative mb-2 max-w-[220px] overflow-hidden rounded-2xl bg-white shadow transition hover:shadow-lg">
+    <article className="group mx-auto w-full relative mb-2 max-w-[220px] overflow-hidden rounded-2xl bg-white shadow transition hover:shadow-lg">
       <Link href={`/products/${product.id}`} className="block">
         <div className="relative aspect-square w-full bg-pink-100">
           {cover && (
