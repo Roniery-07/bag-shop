@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from '@/components/product-card';
 import { ListProductOutputDto } from '@/usecases/product/list-product.usecases';
-
+import './custom-slick-arrow.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -21,8 +21,6 @@ export function ProductSection({
   gap = 'px-4',
 }: Props) {
   const sliderRef = useRef<Slider | null>(null);
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [updateCount, setUpdateCount] = useState(0);
 
   const settings = {
     dots: true,
@@ -31,6 +29,7 @@ export function ProductSection({
     slidesToShow: 4,
     slidesToScroll: 4,
     initialSlide: 0,
+    draggable: false,
     responsive: [
       {
         breakpoint: 1024,
@@ -60,12 +59,14 @@ export function ProductSection({
   };
 
   return (
-    <div className="flex flex-col relative max-w-5xl w-full">
-      <Slider ref={sliderRef} {...settings}>
-        {products.map((p) => (
-          <ProductCard product={p} key={p.id} />
-        ))}
-      </Slider>
+    <div className="flex flex-row">
+      <div className="flex flex-col relative max-w-5xl w-full">
+        <Slider ref={sliderRef} {...settings}>
+          {products.map((p) => (
+            <ProductCard product={p} key={p.id} />
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 }
