@@ -1,27 +1,18 @@
 import { ProductGateway } from '@/domain/model/product/gateway/product.gateway';
 import { Usecase } from '../usecases';
 import { Product } from '@/domain/model/product/entity/product';
+import { GetProductOutputDto } from './get-product.usecases';
 
 export type ListProductInputDto = {
   search?: string;
 };
 
-export type ListProductOutputDto = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  images: {
-    id: string;
-    url: string;
-    alt: string;
-    order: number;
-  }[];
-}[];
+export type ListProductOutputDto = GetProductOutputDto[];
 
 export class ListProductUsecase
-  implements Usecase<ListProductInputDto, ListProductOutputDto> {
-  private constructor(private productGateway: ProductGateway) { }
+  implements Usecase<ListProductInputDto, ListProductOutputDto>
+{
+  private constructor(private productGateway: ProductGateway) {}
 
   public static create(productGateway: ProductGateway) {
     return new ListProductUsecase(productGateway);
@@ -40,6 +31,7 @@ export class ListProductUsecase
       id: p.id,
       name: p.name,
       price: p.price,
+      description: p.description || '',
       quantity: p.quantity,
       images: p.images.map((img) => ({
         id: img.id,
