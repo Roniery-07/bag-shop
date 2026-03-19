@@ -35,23 +35,6 @@ model ProductImages {
   @@map("product_images")
 }
 
-model User {
-  id        String   @id
-  createdAt DateTime
-  updatedAt DateTime
-
-  name          String
-  email         String  @unique
-  emailVerified Boolean
-  image         String?
-
-  sessions Session[]
-  accounts Account[]
-  Cart     Cart?
-
-  @@map("users")
-}
-
 model Session {
   id        String   @id
   createdAt DateTime
@@ -66,6 +49,26 @@ model Session {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model User {
+  id            String  @id
+  name          String
+  email         String  @unique
+  emailVerified Boolean
+  image         String?
+
+  // 2. Replace the old relation with a simple Enum field
+  role UserRole @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+  Cart     Cart?
+
+  @@map("users")
 }
 
 model Account {
@@ -119,4 +122,10 @@ model CartItem {
 
   @@id([cartId, productId])
   @@map("cart_items")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MANAGER
 }

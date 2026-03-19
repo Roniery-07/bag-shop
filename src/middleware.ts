@@ -1,22 +1,46 @@
 import { getSessionCookie } from 'better-auth/cookies';
 import { NextRequest, NextResponse } from 'next/server';
+import { Roles } from '@domain/enums/roles';
 
-const protectedRoutes = ['/profile', '/manager', '/cart'];
+const protectedRoutes = ['/profile', '/cart'];
+
+const adminRoutes = ['/manager'];
 
 export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
   const sessionCookie = getSessionCookie(req);
 
-  const res = NextResponse.next();
-
   const isLoggedIn = !!sessionCookie;
   const isOnProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
+  const isOnAdminRoute = adminRoutes.some((route) =>
+    nextUrl.pathname.startsWith(route),
+  );
 
-  if (isOnProtectedRoute && !isLoggedIn) {
-    return NextResponse.redirect(new URL('/auth/login', req.url));
+  if (!isLoggedIn) {
+    if (isOnProtectedRoute || isOnAdminRoute) {
+      return NextResponse.redirect(new URL('/auth/login', req.url));
+    }
+    return NextResponse.next();
   }
 
-  return res;
+  if (isOnAdminRoute) {
+    const response = await fetch(`${nextUrl.origin}/api/auth/get-session`, {
+      headers: {
+        cookie: req.headers.get('cookie') || '',
+      },
+    });
+
+    const session = await response.json();
+
+    console.log(session.user);
+    const userRole = session?.user?.role;
+
+    if (userRole !== Roles.admin) {
+      return NextResponse.redirect(new URL('/unauthorized', req.url));
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {

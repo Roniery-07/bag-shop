@@ -1,21 +1,23 @@
 import { Cart } from '@domain/model/cart/entity/cart';
-
+import { Roles } from '@domain/enums/roles';
 export type UserProps = {
   id: string;
   name: string;
   email: string;
+  role?: Roles;
   cart?: Cart;
 };
 
 export class User {
-  private constructor(private props: UserProps) {}
+  private constructor(private props: UserProps) { }
 
-  public static create(name: string, email: string) {
+  public static create(name: string, email: string, role: Roles = Roles.user) {
     const id = crypto.randomUUID().toString();
     return new User({
       id,
       name,
       email,
+      role,
     });
   }
 
