@@ -2,8 +2,10 @@ import React from 'react';
 
 export default function Dashboard() {
   return (
-    <div className="w-full h-screen bg-amber-300">
-      <div className="rounded-md"></div>
+    <div className="w-full h-screen">
+      <div className="rounded-md p-10">
+        <h1>Dashboard</h1>
+      </div>
     </div>
   );
 }
