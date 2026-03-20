@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ quantityPersisted }, { status: 201 });
   } catch (err) {
-    console.error('POST /api/products/add-to-cart error:', err);
+    console.error('POST /api/products/update-quantity error:', err);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }
