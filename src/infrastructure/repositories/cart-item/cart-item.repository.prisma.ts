@@ -12,7 +12,10 @@ export class CartItemRepositoryPrisma implements CartItemGateway {
     return new CartItemRepositoryPrisma(prismaClient);
   }
 
-  public async get(cartId: string, productId: string): Promise<CartItem> {
+  public async get(
+    cartId: string,
+    productId: string,
+  ): Promise<CartItem | null> {
     const cartRaw = await this.prismaClient.cartItem.findUnique({
       where: {
         cartId_productId: {
@@ -38,7 +41,7 @@ export class CartItemRepositoryPrisma implements CartItemGateway {
       },
     });
 
-    if (!cartRaw) throw new Error('Cart item does not exists!');
+    if (!cartRaw) return null;
 
     const cartItem = CartItem.with({
       cartId: cartRaw.cartId,
