@@ -8,6 +8,7 @@ import { DropdownList } from '@/components/dropdown-list';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/lib/context/authContext';
+import { toast } from 'sonner';
 
 type ProductBuyBoxProps = {
   productId: string;
@@ -29,6 +30,10 @@ export const ProductBuyBox = ({
       router.push(`/auth/login?callbackUrl=${encodeURIComponent(pathname)}`);
       return;
     }
+    if (!quantity) {
+      toast.warning('Selecione a quantidade primeiro');
+      return;
+    }
     const res = await fetch('/api/cart/add-product', {
       method: 'POST',
       body: JSON.stringify({
@@ -37,10 +42,14 @@ export const ProductBuyBox = ({
       }),
     });
     const resJson = await res.json();
+
     if (resJson.ok != true) {
-      console.log('Selecione a quantidade');
+      toast.error(resJson.message ?? resJson.error, {
+        description: resJson.cause,
+      });
+      return;
     }
-    console.log(resJson);
+    toast.success('Produto adicionado ao carrinho!');
   };
 
   return (

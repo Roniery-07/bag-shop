@@ -8,6 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { GetProductOutputDto } from '@/usecases/product/get-product.usecases';
 
 import { useAuth } from '@/lib/context/authContext';
+import { toast } from 'sonner';
 
 interface Props {
   product: GetProductOutputDto;
@@ -24,13 +25,16 @@ export default function ProductCard({ product }: Props) {
     quantity: number,
   ) => {
     e.stopPropagation();
+
     if (!user) {
       router.push(`auth/login?callbackUrl=${encodeURIComponent(pathname)}`);
       return;
     }
     const res = await fetch('api/cart/add-product/', {
       method: 'POST',
-      headers: { ContentType: 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ productId, quantity }),
     });
 
@@ -40,7 +44,9 @@ export default function ProductCard({ product }: Props) {
 
     if (!res.ok) {
       const err = await res.json().catch(() => null);
-      throw new Error(err?.error ?? 'Falha ao adicionar ao carrinho.');
+      toast.error(err.message ?? err.error, {
+        description: err.cause,
+      });
     }
   };
 
@@ -85,15 +91,14 @@ export default function ProductCard({ product }: Props) {
             {/* )} */}
           </div>
         </div>
-
-        <button
-          onClick={(e) => handleAddToCartClick(e, product.id, 1)}
-          className="absolute bottom-3 right-3 hidden items-center gap-1 rounded-full bg-pink-400 px-3 py-1.5 
-          z-50 text-xs font-semibold text-white shadow-md transition hover:bg-pink-500 group-hover:flex"
-        >
-          <ShoppingCart className="h-4 w-4" />
-        </button>
       </Link>
+      <button
+        onClick={(e) => handleAddToCartClick(e, product.id, 1)}
+        className="absolute bottom-3 right-3 hidden items-center gap-1 rounded-full bg-pink-400 px-3 py-1.5 
+          z-50 text-xs font-semibold text-white shadow-md transition hover:bg-pink-500 group-hover:flex hover:cursor-auto"
+      >
+        <ShoppingCart className="h-4 w-4" />
+      </button>
     </article>
   );
 }

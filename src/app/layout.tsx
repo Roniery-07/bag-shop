@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/context/authContext';
+import { Toaster } from '@/components/ui/sonner';
 
 const poppins = Poppins({
   weight: '500',
@@ -26,6 +27,7 @@ export default function RootLayout({
       >
         <main className="flex-grow">
           <AuthProvider>{children}</AuthProvider>
+          <Toaster theme="light" />
         </main>
       </body>
     </html>

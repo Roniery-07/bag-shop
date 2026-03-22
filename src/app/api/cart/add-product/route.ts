@@ -7,6 +7,7 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db/prisma';
 import { AddToCartUsecase } from '@/usecases/cart/add-product.usecase';
 import { ProductRepositoryPrisma } from '@/infrastructure/repositories/product/product.repository.prisma';
+import { QuantityError } from '@/domain/errors/quantity-error';
 
 export async function POST(req: NextRequest) {
   console.log('adding to cart');
@@ -38,6 +39,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err) {
+    if (err instanceof QuantityError) {
+      return NextResponse.json(err.format(), { status: 400 });
+    }
     console.error('POST /api/products/add-to-cart error:', err);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
